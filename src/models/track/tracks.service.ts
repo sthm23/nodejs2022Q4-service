@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TracksDto } from './dto/tracks.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { Track } from './interfeces/tracks.interface';
 
 @Injectable()
 export class TracksService {

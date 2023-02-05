@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { Artist } from './interfeces/artist.interface';
 
 @Injectable()
 export class ArtistService {
