@@ -23,10 +23,6 @@ export class FavoritesService implements OnModuleInit {
   }
 
   getAll() {
-    // console.log(this.userService.users);
-    // console.log(this.albumService.albums);
-    // console.log(this.artistService.artists);
-    // console.log(this.trackService.tracks);
     return this.favorites;
   }
 

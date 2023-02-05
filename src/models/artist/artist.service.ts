@@ -18,14 +18,12 @@ export class ArtistService implements OnModuleInit {
   constructor(private moduleRef: ModuleRef) {}
 
   onModuleInit() {
-    // this.trackService = this.moduleRef.get(TracksService, {strict: false});
-    this.favService = this.moduleRef.get(FavoritesService, {strict: false});
-    this.albumService = this.moduleRef.get(AlbumsService, {strict: false});
+    this.trackService = this.moduleRef.get(TracksService, { strict: false });
+    this.favService = this.moduleRef.get(FavoritesService, { strict: false });
+    this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
   }
 
   getAll() {
-    // console.log(this.trackService.tracks);
-    
     return this.artists;
   }
 

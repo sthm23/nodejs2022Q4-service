@@ -17,9 +17,9 @@ export class AlbumsService implements OnModuleInit {
   constructor(private moduleRef: ModuleRef) {}
 
   onModuleInit() {
-    this.trackService = this.moduleRef.get(TracksService, {strict: false});
-    this.favService = this.moduleRef.get(FavoritesService, {strict: false});
-    this.artistService = this.moduleRef.get(ArtistService, {strict: false});
+    this.trackService = this.moduleRef.get(TracksService, { strict: false });
+    this.favService = this.moduleRef.get(FavoritesService, { strict: false });
+    this.artistService = this.moduleRef.get(ArtistService, { strict: false });
   }
 
   getAll() {
