@@ -33,7 +33,7 @@ export class UsersService {
     if (user.password !== dto.oldPassword) {
       return 'password';
     }
-    const updUser = { ...user, ...dto } as User;
+    const updUser = { ...user, password: dto.newPassword } as User;
     this.users.splice(userIndex, 1, updUser);
     return updUser;
   }

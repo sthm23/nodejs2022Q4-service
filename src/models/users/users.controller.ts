@@ -48,17 +48,17 @@ export class UsersController {
   }
 
   @Post()
-  @UsePipes(new UserValidatePipe(createUserSchema))
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() createUserDto: CreateUserDto) {
+  createUser(
+    @Body(new UserValidatePipe(createUserSchema)) createUserDto: CreateUserDto,
+  ) {
     return this.usersService.create(createUserDto);
   }
 
   @Put(':id')
-  @UsePipes(new UserValidatePipe(updateUserSchema))
   @HttpCode(HttpStatus.OK)
   updateUser(
-    @Body() updateUserDto: UpdateUserDTO,
+    @Body(new UserValidatePipe(updateUserSchema)) updateUserDto: UpdateUserDTO,
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -69,6 +69,7 @@ export class UsersController {
     id: string,
   ) {
     const user = this.usersService.updateOne(id, updateUserDto);
+    console.log(user);
     if (user === undefined) {
       throw new NotFoundException();
     } else if (user === 'password') {
