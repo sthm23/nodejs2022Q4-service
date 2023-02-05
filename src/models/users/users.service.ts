@@ -24,10 +24,6 @@ export class UsersService {
     return newUser;
   }
 
-  getUserIndex(id: string) {
-    return this.users.findIndex((el) => el.id === id);
-  }
-
   updateOne(id: string, dto: UpdateUserDTO) {
     const user = this.users.find((el) => el.id === id);
     if (user === undefined) {

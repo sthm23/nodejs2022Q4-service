@@ -16,8 +16,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { CreateUserDto, createUserSchema } from './dto/create-user.dto';
-import { UserValidatePipe } from './pipes/userCreate.pipe';
-import { UserUpdValidatePipe } from './pipes/userUpdate.pipe';
+import { UserValidatePipe } from './pipes/userValidate.pipe';
 
 @Controller('user')
 export class UsersController {
@@ -56,7 +55,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UsePipes(new UserUpdValidatePipe(updateUserSchema))
+  @UsePipes(new UserValidatePipe(updateUserSchema))
   @HttpCode(HttpStatus.OK)
   updateUser(
     @Body() updateUserDto: UpdateUserDTO,
