@@ -53,6 +53,15 @@ export class AlbumsService implements OnModuleInit {
     const album = this.albums.find((el) => el.id === id);
     const albumIndex = this.albums.findIndex((el) => el.id === id);
     this.albums.splice(albumIndex, 1);
+    const arr = this.favService.favorites.albums.filter(
+      (el) => el !== album.id,
+    );
+    this.favService.favorites.albums = arr;
+    this.trackService.tracks.forEach((el) => {
+      if (el.albumId === album.id) {
+        el = null;
+      }
+    });
     return album;
   }
 }

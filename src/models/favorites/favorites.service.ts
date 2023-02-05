@@ -10,7 +10,11 @@ import { Favarite } from './interfaces/favarite.interface';
 
 @Injectable()
 export class FavoritesService implements OnModuleInit {
-  public favorites: Favarite[] = [];
+  public favorites: Favarite = {
+    artists: [],
+    albums: [],
+    tracks: [],
+  };
   private trackService: TracksService;
   private artistService: ArtistService;
   private albumService: AlbumsService;
@@ -28,52 +32,39 @@ export class FavoritesService implements OnModuleInit {
 
   /* TRACKS OPERATION */
   createTrackById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.tracks) {
-        el.tracks.push(id);
-      }
-    });
+    this.favorites.tracks.push(id);
+
   }
 
   deleteTrackById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.tracks) {
-        el.tracks.filter((item) => item !== id);
-      }
-    });
+    const track = this.favorites.tracks.find((el) => el === id);
+    if (track === undefined) {
+      return track;
+    }
+
   }
 
   /* ALBUMS OPERATION */
   createAlbumById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.albums) {
-        el.albums.push(id);
-      }
-    });
+    this.favorites.albums.push(id);
   }
 
   deleteAlbumById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.albums) {
-        el.albums.filter((item) => item !== id);
-      }
-    });
+    const albums = this.favorites.albums.find((el) => el === id);
+    if (albums === undefined) {
+      return albums;
+    }
   }
 
   /* ARTIST OPERATION */
   createArtistById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.artists) {
-        el.artists.push(id);
-      }
-    });
+    this.favorites.artists.push(id);
   }
 
   deleteArtistById(id: string) {
-    this.favorites.forEach((el) => {
-      if (el.artists) {
-        el.artists.filter((item) => item !== id);
-      }
-    });
+    const artists = this.favorites.artists.find((el) => el === id);
+    if (artists === undefined) {
+      return artists;
+    }
   }
 }

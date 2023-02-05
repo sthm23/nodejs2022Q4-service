@@ -54,6 +54,10 @@ export class TracksService implements OnModuleInit {
     const track = this.tracks.find((el) => el.id === id);
     const trackIndex = this.tracks.findIndex((el) => el.id === id);
     this.tracks.splice(trackIndex, 1);
+    const trackFavArr = this.favService.favorites.tracks.filter(
+      (el) => el !== track.id,
+    );
+    this.favService.favorites.tracks = trackFavArr;
     return track;
   }
 }

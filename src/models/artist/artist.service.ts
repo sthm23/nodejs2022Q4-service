@@ -54,6 +54,20 @@ export class ArtistService implements OnModuleInit {
     const artist = this.artists.find((el) => el.id === id);
     const artistIndex = this.artists.findIndex((el) => el.id === id);
     this.artists.splice(artistIndex, 1);
+    const artFavArr = this.favService.favorites.artists.filter(
+      (el) => el !== id,
+    );
+    this.favService.favorites.artists = artFavArr;
+    this.albumService.albums.forEach((el) => {
+      if (el.artistId === artist.id) {
+        el.artistId = null;
+      }
+    });
+    this.trackService.tracks.forEach((el) => {
+      if (el.artistId === artist.id) {
+        el.artistId = null;
+      }
+    });
     return artist;
   }
 }
