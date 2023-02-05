@@ -47,17 +47,17 @@ export class AlbumsController {
   }
 
   @Post()
-  @UsePipes(new AlbumsValidatePipe(AlbumsSchema))
   @HttpCode(HttpStatus.CREATED)
-  createtrack(@Body() createtrackDto: AlbumsDto) {
+  createtrack(
+    @Body(new AlbumsValidatePipe(AlbumsSchema)) createtrackDto: AlbumsDto,
+  ) {
     return this.albumsService.create(createtrackDto);
   }
 
   @Put(':id')
-  @UsePipes(new AlbumsValidatePipe(AlbumsSchema))
   @HttpCode(HttpStatus.OK)
   updatetrack(
-    @Body() trackDto: AlbumsDto,
+    @Body(new AlbumsValidatePipe(AlbumsSchema)) trackDto: AlbumsDto,
     @Param(
       'id',
       new ParseUUIDPipe({

@@ -47,17 +47,17 @@ export class TracksController {
   }
 
   @Post()
-  @UsePipes(new TracksValidatePipe(TracksSchema))
   @HttpCode(HttpStatus.CREATED)
-  createtrack(@Body() createtrackDto: TracksDto) {
+  createtrack(
+    @Body(new TracksValidatePipe(TracksSchema)) createtrackDto: TracksDto,
+  ) {
     return this.tracksService.create(createtrackDto);
   }
 
   @Put(':id')
-  @UsePipes(new TracksValidatePipe(TracksSchema))
   @HttpCode(HttpStatus.OK)
   updatetrack(
-    @Body() trackDto: TracksDto,
+    @Body(new TracksValidatePipe(TracksSchema)) trackDto: TracksDto,
     @Param(
       'id',
       new ParseUUIDPipe({

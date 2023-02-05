@@ -47,17 +47,17 @@ export class ArtistsController {
   }
 
   @Post()
-  @UsePipes(new ArtistValidatePipe(ArtistSchema))
   @HttpCode(HttpStatus.CREATED)
-  createartist(@Body() createartistDto: ArtistDto) {
+  createartist(
+    @Body(new ArtistValidatePipe(ArtistSchema)) createartistDto: ArtistDto,
+  ) {
     return this.artistsService.create(createartistDto);
   }
 
   @Put(':id')
-  @UsePipes(new ArtistValidatePipe(ArtistSchema))
   @HttpCode(HttpStatus.OK)
   updateartist(
-    @Body() artistDto: ArtistDto,
+    @Body(new ArtistValidatePipe(ArtistSchema)) artistDto: ArtistDto,
     @Param(
       'id',
       new ParseUUIDPipe({

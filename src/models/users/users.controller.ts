@@ -69,7 +69,6 @@ export class UsersController {
     id: string,
   ) {
     const user = this.usersService.updateOne(id, updateUserDto);
-    console.log(user);
     if (user === undefined) {
       throw new NotFoundException();
     } else if (user === 'password') {
