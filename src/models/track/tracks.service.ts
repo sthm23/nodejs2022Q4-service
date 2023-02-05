@@ -1,3 +1,4 @@
+import { OnModuleInit } from '@nestjs/common/interfaces';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { TracksDto } from './dto/tracks.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,17 +7,26 @@ import { UsersService } from '../users/users.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistService } from '../artist/artist.service';
 import { FavoritesService } from '../favorites/favorites.service';
+import { ModuleRef } from '@nestjs/core';
 
 @Injectable()
-export class TracksService {
+export class TracksService implements OnModuleInit {
   public tracks: Track[] = [];
-
+  albumService: AlbumsService;
+  artistService: ArtistService;
+  favService: FavoritesService;
   constructor(
-    // @Inject(UsersService) private userService: UsersService,
-    @Inject(AlbumsService) private albumService: AlbumsService,
-    @Inject(ArtistService) private artistService: ArtistService,
-    @Inject(FavoritesService) private favService: FavoritesService,
+    private moduleRef: ModuleRef,
+    // @Inject(AlbumsService) private albumService: AlbumsService,
+    // @Inject(ArtistService) private artistService: ArtistService,
+    // @Inject(FavoritesService) private favService: FavoritesService,
   ) {}
+
+  onModuleInit() {
+    this.artistService = this.moduleRef.get(ArtistService, {strict: false});
+    this.favService = this.moduleRef.get(FavoritesService, {strict: false});
+    this.albumService = this.moduleRef.get(AlbumsService, {strict: false});
+  }
 
   getAll() {
     // console.log(this.userService.users);
