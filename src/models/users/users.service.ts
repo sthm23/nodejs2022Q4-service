@@ -9,11 +9,21 @@ export class UsersService {
   public users: User[] = [];
 
   getAll() {
-    return this.users;
+    return this.users.map((el) => {
+      const obj = { ...el };
+      delete obj.password;
+      return obj;
+    });
   }
 
   getOneById(id: string) {
-    const user = this.users.find((el) => el.id === id);
+    const user = this.users
+      .map((el) => {
+        const obj = { ...el };
+        delete obj.password;
+        return obj;
+      })
+      .find((el) => el.id === id);
     return user;
   }
 
@@ -21,6 +31,7 @@ export class UsersService {
     const newUser = { ...dto } as User;
     newUser.id = uuidv4();
     this.users.push(newUser);
+    delete newUser.password;
     return newUser;
   }
 
@@ -35,6 +46,7 @@ export class UsersService {
     }
     const updUser = { ...user, password: dto.newPassword } as User;
     this.users.splice(userIndex, 1, updUser);
+    delete updUser.password;
     return updUser;
   }
 
@@ -42,6 +54,7 @@ export class UsersService {
     const user = this.users.find((el) => el.id === id);
     const userIndex = this.users.findIndex((el) => el.id === id);
     this.users.splice(userIndex, 1);
+    delete user.password;
     return user;
   }
 }

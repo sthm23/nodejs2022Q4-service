@@ -35,12 +35,12 @@ export class FavaritesController {
     id: string,
   ) {
     const track = this.favService.createTrackById(id);
-    // if (!track) {
-    //   throw new HttpException(
-    //     "trackId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!track) {
+      throw new HttpException(
+        "trackId doesn't exist",
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     return track;
   }
 
@@ -57,12 +57,9 @@ export class FavaritesController {
     id: string,
   ) {
     const track = this.favService.deleteTrackById(id);
-    // if (!track) {
-    //   throw new HttpException(
-    //     "trackId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!track) {
+      throw new HttpException('trackId not found', HttpStatus.NOT_FOUND);
+    }
     return track;
   }
 
@@ -80,12 +77,12 @@ export class FavaritesController {
     id: string,
   ) {
     const album = this.favService.createAlbumById(id);
-    // if (!album) {
-    //   throw new HttpException(
-    //     "albumId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!album) {
+      throw new HttpException(
+        "albumId doesn't exist",
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     return album;
   }
 
@@ -102,12 +99,9 @@ export class FavaritesController {
     id: string,
   ) {
     const album = this.favService.deleteAlbumById(id);
-    // if (!album) {
-    //   throw new HttpException(
-    //     "albumId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!album) {
+      throw new HttpException('albumId not found', HttpStatus.NOT_FOUND);
+    }
     return album;
   }
 
@@ -125,12 +119,12 @@ export class FavaritesController {
     id: string,
   ) {
     const artist = this.favService.createArtistById(id);
-    // if (!artist) {
-    //   throw new HttpException(
-    //     "artistId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!artist) {
+      throw new HttpException(
+        "artistId doesn't exist",
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     return artist;
   }
 
@@ -147,12 +141,9 @@ export class FavaritesController {
     id: string,
   ) {
     const artist = this.favService.deleteArtistById(id);
-    // if (!artist) {
-    //   throw new HttpException(
-    //     "artistId doesn't exist",
-    //     HttpStatus.UNPROCESSABLE_ENTITY,
-    //   );
-    // }
+    if (!artist) {
+      throw new HttpException('artistId not found', HttpStatus.NOT_FOUND);
+    }
     return artist;
   }
 }
