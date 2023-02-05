@@ -6,7 +6,7 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  public users: User[] = [];
 
   getAll() {
     return this.users;

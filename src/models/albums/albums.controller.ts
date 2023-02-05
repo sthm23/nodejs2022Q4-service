@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   ParseUUIDPipe,
@@ -19,7 +20,10 @@ import { AlbumsValidatePipe } from './pipes/albumsValidate.pipe';
 
 @Controller('album')
 export class AlbumsController {
-  constructor(private albumsService: AlbumsService) {}
+  constructor(
+    // @Inject(DbService) private service: DbService,
+    private albumsService: AlbumsService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)

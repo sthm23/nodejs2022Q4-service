@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { AlbumsDto } from './dto/albums.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Album } from './interfeces/albums.interface';
 
 @Injectable()
 export class AlbumsService {
-  private albums: Album[] = [];
+  public albums: Album[] = [];
 
   getAll() {
     return this.albums;

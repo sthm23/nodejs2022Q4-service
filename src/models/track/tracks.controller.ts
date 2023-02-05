@@ -86,6 +86,6 @@ export class TracksController {
     )
     id: string,
   ) {
-    return this.tracksService.deleteArtist(id);
+    return this.tracksService.deleteTrack(id);
   }
 }

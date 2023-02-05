@@ -5,7 +5,7 @@ import { Artist } from './interfeces/artist.interface';
 
 @Injectable()
 export class ArtistService {
-  private artists: Artist[] = [];
+  public artists: Artist[] = [];
 
   getAll() {
     return this.artists;
