@@ -19,13 +19,14 @@ export class TracksService {
   }
 
   create(dto: TracksDto) {
-    const newtrack = { 
-      
-     } as Track;
+    const newtrack = { ...dto} as Track;
     newtrack.id = uuidv4();
     const art = this.db.artists.find((el) => el.id === dto.artistId);
     const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if(art === undefined || album === undefined) {
+    if(album === undefined && dto.albumId !== null) {
+      return undefined
+    }
+    if(art === undefined && dto.artistId !== null) {
       return undefined
     }
     this.db.tracks.push(newtrack);
@@ -36,7 +37,13 @@ export class TracksService {
     const track = this.db.tracks.find((el) => el.id === id);
     const art = this.db.artists.find((el) => el.id === dto.artistId);
     const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if(track === undefined || art === undefined || album === undefined) {
+    if(album === undefined && dto.albumId !== null) {
+      return undefined
+    }
+    if(art === undefined && dto.artistId !== null) {
+      return undefined
+    }
+    if(track === undefined) {
       return undefined
     }
     const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
@@ -52,7 +59,7 @@ export class TracksService {
     }
     const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
     this.db.tracks.splice(trackIndex, 1);
-    const ind = this.db.favorites.tracks.findIndex((el) => el === id);
+    const ind = this.db.favorites.tracks.findIndex((el) => el.id === id);
     if(ind !== -1) {
       this.db.favorites.tracks.splice(ind, 1);
     }

@@ -90,6 +90,10 @@ export class AlbumsController {
     )
     id: string,
   ) {
-    return this.albumsService.deleteAlbum(id);
+    const album = this.albumsService.deleteAlbum(id);
+    if (album === undefined) {
+      throw new NotFoundException();
+    }
+    return album;
   }
 }

@@ -3,6 +3,7 @@ import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist } from './interfeces/artist.interface';
 import { DbService } from 'src/db/db.service';
+import { Album, Track } from 'src/db/interfaces';
 
 @Injectable()
 export class ArtistService {
@@ -47,19 +48,25 @@ export class ArtistService {
     const artistIndex = this.db.artists.findIndex((el) => el.id === id);
     this.db.artists.splice(artistIndex, 1);
     
-    const favArtInd = this.db.favorites.artists.findIndex((el) => el === id);
+    const favArtInd = this.db.favorites.artists.findIndex((el) => el.id === id);
     if(favArtInd !== -1) {
       this.db.favorites.artists.splice(favArtInd, 1);
     }
     
     const albumInd = this.db.albums.findIndex((el)=>el.artistId === id);
+    const album = this.db.albums.find((el)=>el.artistId === id);
     if(albumInd !== -1) {
-      this.db.albums.splice(albumInd, 1, null);
+      const obj = {...album} as Album;
+      obj.artistId = null
+      this.db.albums.splice(albumInd, 1, obj);
     }
     
     const trackInd = this.db.tracks.findIndex((el)=>el.artistId === id);
+    const track = this.db.tracks.find((el)=>el.artistId === id);
     if(trackInd !== -1) {
-      this.db.tracks.splice(trackInd, 1, null);
+      const obj = {...track} as Track;
+      obj.artistId = null
+      this.db.tracks.splice(trackInd, 1, obj);
     }
     return artist;
   }

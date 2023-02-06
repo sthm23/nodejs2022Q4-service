@@ -10,11 +10,7 @@ export interface Album {
     name: string;
     grammy: boolean;
   }
-  export interface Favarite {
-    artists: string[]; // favorite artists ids
-    albums: string[]; // favorite albums ids
-    tracks: string[]; // favorite tracks ids
-  }
+
   export interface Track {
     id: string; // uuid v4
     name: string;
@@ -29,5 +25,11 @@ export interface Album {
     version: number; // integer number, increments on update
     createdAt: number; // timestamp of creation
     updatedAt: number; // timestamp of last update
+  }
+
+  export interface Favarite {
+    artists: Artist[]; // favorite artists ids
+    albums: Album[]; // favorite albums ids
+    tracks: Track[]; // favorite tracks ids
   }
   

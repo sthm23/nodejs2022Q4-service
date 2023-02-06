@@ -17,12 +17,12 @@ export class FavoritesService {
     if (track === undefined) {
       return track;
     }
-    this.db.favorites.tracks.push(id);
+    this.db.favorites.tracks.push(track);
     return track;
   }
 
   deleteTrackById(id: string) {
-    const trackInd = this.db.favorites.tracks.findIndex((el) => el === id);
+    const trackInd = this.db.favorites.tracks.findIndex((el) => el.id === id);
     if (trackInd === -1) {
       return undefined;
     }
@@ -35,12 +35,12 @@ export class FavoritesService {
     if (album === undefined) {
       return album;
     }
-    this.db.favorites.albums.push(id);
+    this.db.favorites.albums.push(album);
     return album;
   }
 
   deleteAlbumById(id: string) {
-    const albums = this.db.favorites.albums.findIndex((el) => el === id);
+    const albums = this.db.favorites.albums.findIndex((el) => el.id === id);
     if (albums === -1) {
       return undefined;
     }
@@ -53,12 +53,12 @@ export class FavoritesService {
     if (artist === undefined) {
       return artist;
     }
-    this.db.favorites.artists.push(id);
+    this.db.favorites.artists.push(artist);
     return artist;
   }
 
   deleteArtistById(id: string) {
-    const artists = this.db.favorites.artists.findIndex((el) => el === id);
+    const artists = this.db.favorites.artists.findIndex((el) => el.id === id);
     if (artists === -1) {
       return undefined;
     }
