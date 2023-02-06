@@ -8,19 +8,20 @@ import { AlbumsService } from '../albums/albums.service';
 import { ArtistService } from '../artist/artist.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ModuleRef } from '@nestjs/core';
+import { DbService } from 'src/db/db.service';
 
 @Injectable()
 export class TracksService implements OnModuleInit {
   public tracks: Track[] = [];
-  albumService: AlbumsService;
-  artistService: ArtistService;
-  favService: FavoritesService;
-  constructor(private moduleRef: ModuleRef) {}
+  // albumService: AlbumsService;
+  // artistService: ArtistService;
+  // favService: FavoritesService;
+  constructor(@Inject(DbService) private db: DbService) {}
 
   onModuleInit() {
-    this.artistService = this.moduleRef.get(ArtistService, { strict: false });
-    this.favService = this.moduleRef.get(FavoritesService, { strict: false });
-    this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
+    // this.artistService = this.moduleRef.get(ArtistService, { strict: false });
+    // this.favService = this.moduleRef.get(FavoritesService, { strict: false });
+    // this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
   }
 
   getAll() {
@@ -54,10 +55,10 @@ export class TracksService implements OnModuleInit {
     const track = this.tracks.find((el) => el.id === id);
     const trackIndex = this.tracks.findIndex((el) => el.id === id);
     this.tracks.splice(trackIndex, 1);
-    const trackFavArr = this.favService.favorites.tracks.filter(
+    const trackFavArr = this.db.favorites.tracks.filter(
       (el) => el !== track.id,
     );
-    this.favService.favorites.tracks = trackFavArr;
+    this.db.favorites.tracks = trackFavArr;
     return track;
   }
 }

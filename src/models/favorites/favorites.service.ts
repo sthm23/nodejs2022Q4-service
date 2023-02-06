@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
+import { DbService } from 'src/db/db.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistService } from '../artist/artist.service';
 import { TracksService } from '../track/tracks.service';
@@ -15,33 +16,33 @@ export class FavoritesService implements OnModuleInit {
     albums: [],
     tracks: [],
   };
-  private trackService: TracksService;
-  private artistService: ArtistService;
-  private albumService: AlbumsService;
-  constructor(private moduleRef: ModuleRef) {}
+  // private trackService: TracksService;
+  // private artistService: ArtistService;
+  // private albumService: AlbumsService;
+  constructor(@Inject(DbService) private db: DbService) {}
 
   onModuleInit() {
-    this.trackService = this.moduleRef.get(TracksService, { strict: false });
-    this.artistService = this.moduleRef.get(ArtistService, { strict: false });
-    this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
+    // this.trackService = this.moduleRef.get(TracksService, { strict: false });
+    // this.artistService = this.moduleRef.get(ArtistService, { strict: false });
+    // this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
   }
 
   getAll() {
-    return this.favorites;
+    return this.db.favorites;
   }
 
   /* TRACKS OPERATION */
   createTrackById(id: string) {
-    const track = this.trackService.tracks.find((el) => el.id === id);
+    const track = this.db.tracks.find((el) => el.id === id);
     if (track === undefined) {
       return track;
     }
-    this.favorites.tracks.push(id);
+    this.db.favorites.tracks.push(id);
     return track;
   }
 
   deleteTrackById(id: string) {
-    const trackId = this.favorites.tracks.find((el) => el === id);
+    const trackId = this.db.favorites.tracks.find((el) => el === id);
     if (trackId === undefined) {
       return trackId;
     }
@@ -49,16 +50,16 @@ export class FavoritesService implements OnModuleInit {
 
   /* ALBUMS OPERATION */
   createAlbumById(id: string) {
-    const album = this.albumService.albums.find((el) => el.id === id);
+    const album = this.db.albums.find((el) => el.id === id);
     if (album === undefined) {
       return album;
     }
-    this.favorites.albums.push(id);
+    this.db.favorites.albums.push(id);
     return album;
   }
 
   deleteAlbumById(id: string) {
-    const albums = this.favorites.albums.find((el) => el === id);
+    const albums = this.db.favorites.albums.find((el) => el === id);
     if (albums === undefined) {
       return albums;
     }
@@ -67,16 +68,16 @@ export class FavoritesService implements OnModuleInit {
 
   /* ARTIST OPERATION */
   createArtistById(id: string) {
-    const artist = this.artistService.artists.find((el) => el.id === id);
+    const artist = this.db.artists.find((el) => el.id === id);
     if (artist === undefined) {
       return artist;
     }
-    this.favorites.artists.push(id);
+    this.db.favorites.artists.push(id);
     return artist;
   }
 
   deleteArtistById(id: string) {
-    const artists = this.favorites.artists.find((el) => el === id);
+    const artists = this.db.favorites.artists.find((el) => el === id);
     if (artists === undefined) {
       return artists;
     }
