@@ -13,29 +13,39 @@ export class UsersService {
 
   getAll() {
     return this.db.users.map((el) => {
-      const obj = { ...el };
-      delete obj.password;
+      const obj = {}
+      for (const key in el) {
+        if (Object.prototype.hasOwnProperty.call(el, key)) {
+          const element = el[key];
+          if(key !== 'password') {
+            obj[key] = element
+          }
+        }
+      }
       return obj;
     });
   }
 
   getOneById(id: string) {
     const user = this.db.users
-      .map((el) => {
-        const obj = { ...el };
-        delete obj.password;
-        return obj;
-      })
+      .map(({password, ...res}) => res)
       .find((el) => el.id === id);
     return user;
   }
 
   create(dto: CreateUserDto) {
-    const newUser = { ...dto } as User;
-    newUser.id = uuidv4();
+    const newUser = {
+      id: uuidv4(),
+      login: dto.login, 
+      password: dto.password,
+      version: 1,
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+     } as User;
+
     this.db.users.push(newUser);
-    delete newUser.password;
-    return newUser;
+    const {password, ...res} = newUser;
+    return res
   }
 
   updateOne(id: string, dto: UpdateUserDTO) {
@@ -47,17 +57,28 @@ export class UsersService {
     if (user.password !== dto.oldPassword) {
       return 'password';
     }
-    const updUser = { ...user, password: dto.newPassword } as User;
-    this.db.users.splice(userIndex, 1, updUser);
-    delete updUser.password;
-    return updUser;
+    const updUser = {
+      id: user.id,
+      login: user.login,
+      password: dto.newPassword,
+      version: ++user.version,
+      createdAt: user.createdAt,
+      updatedAt: new Date().getTime(),
+     } as User;
+
+     this.db.users.splice(userIndex, 1, updUser);
+    const {password, ...res} = updUser;
+    return res
   }
 
   deleteUser(id: string) {
     const user = this.db.users.find((el) => el.id === id);
+    if(user == undefined) {
+      return undefined
+    }
     const userIndex = this.db.users.findIndex((el) => el.id === id);
     this.db.users.splice(userIndex, 1);
-    delete user.password;
-    return user;
+    const {password, ...res} = user;
+    return res;
   }
 }

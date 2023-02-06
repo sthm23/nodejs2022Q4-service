@@ -13,7 +13,6 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  UsePipes,
 } from '@nestjs/common';
 import { CreateUserDto, createUserSchema } from './dto/create-user.dto';
 import { UserValidatePipe } from './pipes/userValidate.pipe';
@@ -89,6 +88,9 @@ export class UsersController {
     )
     id: string,
   ) {
-    return this.usersService.deleteUser(id);
+    const user = this.usersService.deleteUser(id);
+    if(user === undefined) {
+      throw new NotFoundException();
+    }
   }
 }
