@@ -89,7 +89,7 @@ export class UsersController {
     id: string,
   ) {
     const user = this.usersService.deleteUser(id);
-    if(user === undefined) {
+    if (user === undefined) {
       throw new NotFoundException();
     }
   }

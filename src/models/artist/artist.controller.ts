@@ -5,14 +5,12 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
   HttpStatus,
   NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
-  UsePipes,
 } from '@nestjs/common';
 import { ArtistDto, ArtistSchema } from './dto/artist.dto';
 import { ArtistValidatePipe } from './pipes/artistCreate.pipe';
@@ -52,10 +50,10 @@ export class ArtistsController {
     @Body(new ArtistValidatePipe(ArtistSchema)) createartistDto: ArtistDto,
   ) {
     const art = this.artistsService.create(createartistDto);
-    if(art === undefined) {
+    if (art === undefined) {
       throw new NotFoundException();
     }
-    return art
+    return art;
   }
 
   @Put(':id')
@@ -91,8 +89,8 @@ export class ArtistsController {
     id: string,
   ) {
     const art = this.artistsService.deleteArtist(id);
-    if(art === undefined) {
-      throw new NotFoundException()
+    if (art === undefined) {
+      throw new NotFoundException();
     }
     return art;
   }

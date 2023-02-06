@@ -22,7 +22,7 @@ export class AlbumsService {
     const newAlbum = { ...dto } as Album;
     newAlbum.id = uuidv4();
     const artist = this.db.artists.find((el) => el.id === dto.artistId);
-    if(artist === undefined && dto.artistId !== null) {
+    if (artist === undefined && dto.artistId !== null) {
       return undefined;
     }
     this.db.albums.push(newAlbum);
@@ -36,7 +36,7 @@ export class AlbumsService {
     }
     const albumIndex = this.db.albums.findIndex((el) => el.id === id);
     const artist = this.db.artists.find((el) => el.id === dto.artistId);
-    if(artist === undefined && dto.artistId !== null) {
+    if (artist === undefined && dto.artistId !== null) {
       return undefined;
     }
     const updAlbum = { ...album, ...dto } as Album;
@@ -46,19 +46,21 @@ export class AlbumsService {
 
   deleteAlbum(id: string) {
     const album = this.db.albums.find((el) => el.id === id);
-    if(album === undefined) {
-      return undefined
+    if (album === undefined) {
+      return undefined;
     }
 
-    const favAlbumIndex = this.db.favorites.albums.findIndex((el)=> el.id === album.id);
-    if(favAlbumIndex !== -1) {
+    const favAlbumIndex = this.db.favorites.albums.findIndex(
+      (el) => el.id === album.id,
+    );
+    if (favAlbumIndex !== -1) {
       this.db.favorites.albums.splice(favAlbumIndex, 1);
     }
     const trackInd = this.db.tracks.findIndex((el) => el.albumId === id);
     const track = this.db.tracks.find((el) => el.albumId === id);
-    if(trackInd !== -1) {
-      const obj = {...track} as Track;
-      obj.albumId = null
+    if (trackInd !== -1) {
+      const obj = { ...track } as Track;
+      obj.albumId = null;
       this.db.tracks.splice(trackInd, 1, obj);
     }
     const albumIndex = this.db.albums.findIndex((el) => el.id === id);

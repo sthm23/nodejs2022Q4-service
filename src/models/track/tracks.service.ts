@@ -6,7 +6,6 @@ import { DbService } from 'src/db/db.service';
 
 @Injectable()
 export class TracksService {
-
   constructor(@Inject(DbService) private db: DbService) {}
 
   getAll() {
@@ -19,15 +18,15 @@ export class TracksService {
   }
 
   create(dto: TracksDto) {
-    const newtrack = { ...dto} as Track;
+    const newtrack = { ...dto } as Track;
     newtrack.id = uuidv4();
     const art = this.db.artists.find((el) => el.id === dto.artistId);
     const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if(album === undefined && dto.albumId !== null) {
-      return undefined
+    if (album === undefined && dto.albumId !== null) {
+      return undefined;
     }
-    if(art === undefined && dto.artistId !== null) {
-      return undefined
+    if (art === undefined && dto.artistId !== null) {
+      return undefined;
     }
     this.db.tracks.push(newtrack);
     return newtrack;
@@ -37,14 +36,14 @@ export class TracksService {
     const track = this.db.tracks.find((el) => el.id === id);
     const art = this.db.artists.find((el) => el.id === dto.artistId);
     const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if(album === undefined && dto.albumId !== null) {
-      return undefined
+    if (album === undefined && dto.albumId !== null) {
+      return undefined;
     }
-    if(art === undefined && dto.artistId !== null) {
-      return undefined
+    if (art === undefined && dto.artistId !== null) {
+      return undefined;
     }
-    if(track === undefined) {
-      return undefined
+    if (track === undefined) {
+      return undefined;
     }
     const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
     const updtrack = { ...track, ...dto } as Track;
@@ -54,13 +53,13 @@ export class TracksService {
 
   deleteTrack(id: string) {
     const track = this.db.tracks.find((el) => el.id === id);
-    if(track === undefined) {
-      return undefined
+    if (track === undefined) {
+      return undefined;
     }
     const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
     this.db.tracks.splice(trackIndex, 1);
     const ind = this.db.favorites.tracks.findIndex((el) => el.id === id);
-    if(ind !== -1) {
+    if (ind !== -1) {
       this.db.favorites.tracks.splice(ind, 1);
     }
     return track;

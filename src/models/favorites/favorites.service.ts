@@ -1,10 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 
-
 @Injectable()
 export class FavoritesService {
-
   constructor(@Inject(DbService) private db: DbService) {}
 
   getAll() {

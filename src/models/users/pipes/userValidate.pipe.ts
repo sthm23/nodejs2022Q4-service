@@ -1,5 +1,4 @@
 import {
-  ArgumentMetadata,
   HttpException,
   HttpStatus,
   Injectable,
@@ -11,7 +10,7 @@ import { ObjectSchema } from 'joi';
 export class UserValidatePipe implements PipeTransform {
   constructor(private schema: ObjectSchema) {}
 
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: any) {
     const { error } = this.schema.validate(value);
     if (error) {
       throw new HttpException('Wrong Property', HttpStatus.BAD_REQUEST);

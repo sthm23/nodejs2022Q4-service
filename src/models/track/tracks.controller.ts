@@ -5,14 +5,12 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
   HttpStatus,
   NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
-  UsePipes,
 } from '@nestjs/common';
 import { TracksDto, TracksSchema } from './dto/tracks.dto';
 import { TracksValidatePipe } from './pipes/tracksValidate.pipe';
@@ -52,10 +50,10 @@ export class TracksController {
     @Body(new TracksValidatePipe(TracksSchema)) createtrackDto: TracksDto,
   ) {
     const track = this.tracksService.create(createtrackDto);
-    if(track === undefined) {
+    if (track === undefined) {
       throw new NotFoundException();
     }
-    return track
+    return track;
   }
 
   @Put(':id')
@@ -91,7 +89,7 @@ export class TracksController {
     id: string,
   ) {
     const track = this.tracksService.deleteTrack(id);
-    if(track === undefined) {
+    if (track === undefined) {
       throw new NotFoundException();
     }
     return track;

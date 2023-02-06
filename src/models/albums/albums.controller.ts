@@ -17,9 +17,7 @@ import { AlbumsValidatePipe } from './pipes/albumsValidate.pipe';
 
 @Controller('album')
 export class AlbumsController {
-  constructor(
-    private albumsService: AlbumsService,
-  ) {}
+  constructor(private albumsService: AlbumsService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -52,7 +50,7 @@ export class AlbumsController {
     @Body(new AlbumsValidatePipe(AlbumsSchema)) createAlbumDto: AlbumsDto,
   ) {
     const album = this.albumsService.create(createAlbumDto);
-    if(!album) {
+    if (!album) {
       throw new NotFoundException();
     }
     return album;
