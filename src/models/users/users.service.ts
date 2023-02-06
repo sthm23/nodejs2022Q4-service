@@ -8,11 +8,10 @@ import { Inject } from '@nestjs/common/decorators';
 
 @Injectable()
 export class UsersService {
-  public users: User[] = [];
 
   constructor(@Inject(DbService) private db: DbService) {}
 
-  getAll() {    
+  getAll() {
     return this.db.users.map((el) => {
       const obj = { ...el };
       delete obj.password;

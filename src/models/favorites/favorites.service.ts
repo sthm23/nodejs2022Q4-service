@@ -1,31 +1,11 @@
-import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ModuleRef } from '@nestjs/core';
+import { Inject, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
-import { AlbumsService } from '../albums/albums.service';
-import { ArtistService } from '../artist/artist.service';
-import { TracksService } from '../track/tracks.service';
-// import { UsersService } from '../users/users.service';
-// import { v4 as uuidv4 } from 'uuid';
-// import { FavoritesDto } from './dto/favorites-dto';
-import { Favarite } from './interfaces/favarite.interface';
+
 
 @Injectable()
-export class FavoritesService implements OnModuleInit {
-  public favorites: Favarite = {
-    artists: [],
-    albums: [],
-    tracks: [],
-  };
-  // private trackService: TracksService;
-  // private artistService: ArtistService;
-  // private albumService: AlbumsService;
-  constructor(@Inject(DbService) private db: DbService) {}
+export class FavoritesService {
 
-  onModuleInit() {
-    // this.trackService = this.moduleRef.get(TracksService, { strict: false });
-    // this.artistService = this.moduleRef.get(ArtistService, { strict: false });
-    // this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
-  }
+  constructor(@Inject(DbService) private db: DbService) {}
 
   getAll() {
     return this.db.favorites;
@@ -42,10 +22,11 @@ export class FavoritesService implements OnModuleInit {
   }
 
   deleteTrackById(id: string) {
-    const trackId = this.db.favorites.tracks.find((el) => el === id);
-    if (trackId === undefined) {
-      return trackId;
+    const trackInd = this.db.favorites.tracks.findIndex((el) => el === id);
+    if (trackInd === -1) {
+      return undefined;
     }
+    return this.db.favorites.tracks.splice(trackInd, 1);
   }
 
   /* ALBUMS OPERATION */
@@ -59,11 +40,11 @@ export class FavoritesService implements OnModuleInit {
   }
 
   deleteAlbumById(id: string) {
-    const albums = this.db.favorites.albums.find((el) => el === id);
-    if (albums === undefined) {
-      return albums;
+    const albums = this.db.favorites.albums.findIndex((el) => el === id);
+    if (albums === -1) {
+      return undefined;
     }
-    return albums;
+    return this.db.favorites.albums.splice(albums, 1);
   }
 
   /* ARTIST OPERATION */
@@ -77,10 +58,10 @@ export class FavoritesService implements OnModuleInit {
   }
 
   deleteArtistById(id: string) {
-    const artists = this.db.favorites.artists.find((el) => el === id);
-    if (artists === undefined) {
-      return artists;
+    const artists = this.db.favorites.artists.findIndex((el) => el === id);
+    if (artists === -1) {
+      return undefined;
     }
-    return artists;
+    return this.db.favorites.artists.splice(artists, 1);
   }
 }

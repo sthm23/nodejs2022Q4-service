@@ -5,15 +5,12 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
   HttpStatus,
-  Inject,
   NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Put,
-  UsePipes,
 } from '@nestjs/common';
 import { AlbumsDto, AlbumsSchema } from './dto/albums.dto';
 import { AlbumsValidatePipe } from './pipes/albumsValidate.pipe';
@@ -21,7 +18,6 @@ import { AlbumsValidatePipe } from './pipes/albumsValidate.pipe';
 @Controller('album')
 export class AlbumsController {
   constructor(
-    // @Inject(DbService) private service: DbService,
     private albumsService: AlbumsService,
   ) {}
 
@@ -33,7 +29,7 @@ export class AlbumsController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  gettrack(
+  getAlbum(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -43,25 +39,29 @@ export class AlbumsController {
     )
     id: string,
   ) {
-    const track = this.albumsService.getOneById(id);
-    if (!track) {
+    const album = this.albumsService.getOneById(id);
+    if (!album) {
       throw new NotFoundException();
     }
-    return track;
+    return album;
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createtrack(
-    @Body(new AlbumsValidatePipe(AlbumsSchema)) createtrackDto: AlbumsDto,
+  createAlbum(
+    @Body(new AlbumsValidatePipe(AlbumsSchema)) createAlbumDto: AlbumsDto,
   ) {
-    return this.albumsService.create(createtrackDto);
+    const album = this.albumsService.create(createAlbumDto);
+    if(!album) {
+      throw new NotFoundException();
+    }
+    return album;
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updatetrack(
-    @Body(new AlbumsValidatePipe(AlbumsSchema)) trackDto: AlbumsDto,
+  updateAlbum(
+    @Body(new AlbumsValidatePipe(AlbumsSchema)) albumDto: AlbumsDto,
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -71,16 +71,16 @@ export class AlbumsController {
     )
     id: string,
   ) {
-    const track = this.albumsService.updateOne(id, trackDto);
-    if (track === undefined) {
+    const album = this.albumsService.updateOne(id, albumDto);
+    if (album === undefined) {
       throw new NotFoundException();
     }
-    return track;
+    return album;
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deletetrack(
+  deleteAlbum(
     @Param(
       'id',
       new ParseUUIDPipe({

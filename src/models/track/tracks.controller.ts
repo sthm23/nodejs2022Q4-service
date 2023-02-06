@@ -51,7 +51,11 @@ export class TracksController {
   createtrack(
     @Body(new TracksValidatePipe(TracksSchema)) createtrackDto: TracksDto,
   ) {
-    return this.tracksService.create(createtrackDto);
+    const track = this.tracksService.create(createtrackDto);
+    if(track === undefined) {
+      throw new NotFoundException();
+    }
+    return track
   }
 
   @Put(':id')
@@ -86,6 +90,10 @@ export class TracksController {
     )
     id: string,
   ) {
-    return this.tracksService.deleteTrack(id);
+    const track = this.tracksService.deleteTrack(id);
+    if(track === undefined) {
+      throw new NotFoundException();
+    }
+    return track;
   }
 }

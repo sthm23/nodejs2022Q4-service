@@ -1,64 +1,59 @@
-import { OnModuleInit } from '@nestjs/common/interfaces';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { TracksDto } from './dto/tracks.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Track } from './interfeces/tracks.interface';
-import { UsersService } from '../users/users.service';
-import { AlbumsService } from '../albums/albums.service';
-import { ArtistService } from '../artist/artist.service';
-import { FavoritesService } from '../favorites/favorites.service';
-import { ModuleRef } from '@nestjs/core';
 import { DbService } from 'src/db/db.service';
 
 @Injectable()
-export class TracksService implements OnModuleInit {
-  public tracks: Track[] = [];
-  // albumService: AlbumsService;
-  // artistService: ArtistService;
-  // favService: FavoritesService;
+export class TracksService {
+
   constructor(@Inject(DbService) private db: DbService) {}
 
-  onModuleInit() {
-    // this.artistService = this.moduleRef.get(ArtistService, { strict: false });
-    // this.favService = this.moduleRef.get(FavoritesService, { strict: false });
-    // this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
-  }
-
   getAll() {
-    return this.tracks;
+    return this.db.tracks;
   }
 
   getOneById(id: string) {
-    const track = this.tracks.find((el) => el.id === id);
+    const track = this.db.tracks.find((el) => el.id === id);
     return track;
   }
 
   create(dto: TracksDto) {
     const newtrack = { ...dto } as Track;
     newtrack.id = uuidv4();
-    this.tracks.push(newtrack);
+    const art = this.db.artists.find((el) => el.id === dto.artistId);
+    const album = this.db.albums.find((el) => el.id === dto.albumId);
+    if(art === undefined || album === undefined) {
+      return undefined
+    }
+    this.db.tracks.push(newtrack);
     return newtrack;
   }
 
   updateOne(id: string, dto: TracksDto) {
-    const track = this.tracks.find((el) => el.id === id);
-    if (track === undefined) {
-      return track;
+    const track = this.db.tracks.find((el) => el.id === id);
+    const art = this.db.artists.find((el) => el.id === dto.artistId);
+    const album = this.db.albums.find((el) => el.id === dto.albumId);
+    if(track === undefined || art === undefined || album === undefined) {
+      return undefined
     }
-    const trackIndex = this.tracks.findIndex((el) => el.id === id);
+    const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
     const updtrack = { ...track, ...dto } as Track;
-    this.tracks.splice(trackIndex, 1, updtrack);
+    this.db.tracks.splice(trackIndex, 1, updtrack);
     return updtrack;
   }
 
   deleteTrack(id: string) {
-    const track = this.tracks.find((el) => el.id === id);
-    const trackIndex = this.tracks.findIndex((el) => el.id === id);
-    this.tracks.splice(trackIndex, 1);
-    const trackFavArr = this.db.favorites.tracks.filter(
-      (el) => el !== track.id,
-    );
-    this.db.favorites.tracks = trackFavArr;
+    const track = this.db.tracks.find((el) => el.id === id);
+    if(track === undefined) {
+      return undefined
+    }
+    const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
+    this.db.tracks.splice(trackIndex, 1);
+    const ind = this.db.favorites.tracks.findIndex((el) => el === id);
+    if(ind !== -1) {
+      this.db.favorites.tracks.splice(ind, 1);
+    }
     return track;
   }
 }

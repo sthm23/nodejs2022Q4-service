@@ -2,27 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist } from './interfeces/artist.interface';
-import { TracksService } from '../track/tracks.service';
-import { ModuleRef } from '@nestjs/core';
-import { FavoritesService } from '../favorites/favorites.service';
-import { AlbumsService } from '../albums/albums.service';
-import { OnModuleInit } from '@nestjs/common/interfaces';
 import { DbService } from 'src/db/db.service';
 
 @Injectable()
-export class ArtistService implements OnModuleInit {
-  public artists: Artist[] = [];
+export class ArtistService {
 
-  // private trackService: TracksService;
-  // private favService: FavoritesService;
-  // private albumService: AlbumsService;
   constructor(@Inject(DbService) private db: DbService) {}
-
-  onModuleInit() {
-    // this.trackService = this.moduleRef.get(TracksService, { strict: false });
-    // this.favService = this.moduleRef.get(FavoritesService, { strict: false });
-    // this.albumService = this.moduleRef.get(AlbumsService, { strict: false });
-  }
 
   getAll() {
     return this.db.artists;
@@ -53,22 +38,23 @@ export class ArtistService implements OnModuleInit {
 
   deleteArtist(id: string) {
     const artist = this.db.artists.find((el) => el.id === id);
+    if(artist === undefined) {
+      return undefined;
+    }
     const artistIndex = this.db.artists.findIndex((el) => el.id === id);
     this.db.artists.splice(artistIndex, 1);
-    const artFavArr = this.db.favorites.artists.filter(
-      (el) => el !== id,
-    );
-    this.db.favorites.artists = artFavArr;
-    this.db.albums.forEach((el) => {
-      if (el.artistId === artist.id) {
-        el.artistId = null;
-      }
-    });
-    this.db.tracks.forEach((el) => {
-      if (el.artistId === artist.id) {
-        el.artistId = null;
-      }
-    });
+    const favArtInd = this.db.favorites.artists.findIndex((el) => el === id);
+    if(favArtInd !== -1) {
+      this.db.favorites.artists.splice(favArtInd, 1);
+    }
+    const albumInd = this.db.albums.findIndex((el)=>el.artistId === id);
+    if(albumInd !== -1) {
+      this.db.albums.splice(albumInd, 1, null);
+    }
+    const trackInd = this.db.tracks.findIndex((el)=>el.artistId === id);
+    if(trackInd !== -1) {
+      this.db.tracks.splice(trackInd, 1, null);
+    }
     return artist;
   }
 }

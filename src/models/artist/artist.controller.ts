@@ -86,6 +86,10 @@ export class ArtistsController {
     )
     id: string,
   ) {
-    return this.artistsService.deleteArtist(id);
+    const art = this.artistsService.deleteArtist(id);
+    if(art === undefined) {
+      throw new NotFoundException()
+    }
+    return art;
   }
 }
