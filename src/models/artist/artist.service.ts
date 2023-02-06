@@ -18,11 +18,14 @@ export class ArtistService {
     return artist;
   }
 
-  create(dto: ArtistDto) {
-    const newartist = { ...dto } as Artist;
-    newartist.id = uuidv4();
-    this.db.artists.push(newartist);
-    return newartist;
+  create({grammy, name}: ArtistDto) {
+    const newArtist = {
+      id: uuidv4(),
+      grammy,
+      name
+     } as Artist;
+    this.db.artists.push(newArtist);
+    return newArtist;
   }
 
   updateOne(id: string, dto: ArtistDto) {
@@ -43,14 +46,17 @@ export class ArtistService {
     }
     const artistIndex = this.db.artists.findIndex((el) => el.id === id);
     this.db.artists.splice(artistIndex, 1);
+    
     const favArtInd = this.db.favorites.artists.findIndex((el) => el === id);
     if(favArtInd !== -1) {
       this.db.favorites.artists.splice(favArtInd, 1);
     }
+    
     const albumInd = this.db.albums.findIndex((el)=>el.artistId === id);
     if(albumInd !== -1) {
       this.db.albums.splice(albumInd, 1, null);
     }
+    
     const trackInd = this.db.tracks.findIndex((el)=>el.artistId === id);
     if(trackInd !== -1) {
       this.db.tracks.splice(trackInd, 1, null);

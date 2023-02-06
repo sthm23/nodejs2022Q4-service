@@ -9,7 +9,7 @@ export interface TracksDto {
 
 export const TracksSchema = Joi.object({
   name: Joi.string().required(),
-  artistId: Joi.string().required() || null,
-  albumId: Joi.string().required() || null,
+  artistId: Joi.string().allow(null).required(),
+  albumId: Joi.string().allow(null).required(),
   duration: Joi.number().required(),
 });

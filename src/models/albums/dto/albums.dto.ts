@@ -8,6 +8,6 @@ export interface AlbumsDto {
 
 export const AlbumsSchema = Joi.object({
   name: Joi.string().required(),
-  artistId: Joi.string().required() || null,
+  artistId: Joi.string().allow(null).required(),
   year: Joi.number().required(),
 });

@@ -40,7 +40,7 @@ export class ArtistsController {
     id: string,
   ) {
     const artist = this.artistsService.getOneById(id);
-    if (!artist) {
+    if (artist === undefined) {
       throw new NotFoundException();
     }
     return artist;
@@ -51,7 +51,11 @@ export class ArtistsController {
   createartist(
     @Body(new ArtistValidatePipe(ArtistSchema)) createartistDto: ArtistDto,
   ) {
-    return this.artistsService.create(createartistDto);
+    const art = this.artistsService.create(createartistDto);
+    if(art === undefined) {
+      throw new NotFoundException();
+    }
+    return art
   }
 
   @Put(':id')

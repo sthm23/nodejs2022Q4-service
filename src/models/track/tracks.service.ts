@@ -19,7 +19,9 @@ export class TracksService {
   }
 
   create(dto: TracksDto) {
-    const newtrack = { ...dto } as Track;
+    const newtrack = { 
+      
+     } as Track;
     newtrack.id = uuidv4();
     const art = this.db.artists.find((el) => el.id === dto.artistId);
     const album = this.db.albums.find((el) => el.id === dto.albumId);
