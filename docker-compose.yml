@@ -1,0 +1,36 @@
+version: '3.6'
+
+services:
+  nodejs-docker:
+    image: nodejs2022q4_docker
+    env_file:
+      - .env
+    build: ./
+    restart: always
+    networks:
+      - postgres
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - postgres
+    environment:
+      - PORT=${PORT}
+    volumes:
+      - ./:/nodejs2022q4/music_lib/src
+  postgres:
+    build: ./postgres/
+    networks:
+    - postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - ./:/db/postgres
+networks:
+  postgres:
+    driver: bridge
