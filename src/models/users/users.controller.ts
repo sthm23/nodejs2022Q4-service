@@ -56,7 +56,7 @@ export class UsersController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateUser(
+  async updateUser(
     @Body(new UserValidatePipe(updateUserSchema)) updateUserDto: UpdateUserDTO,
     @Param(
       'id',
@@ -67,7 +67,7 @@ export class UsersController {
     )
     id: string,
   ) {
-    const user = this.usersService.updateOne(id, updateUserDto);
+    const user = await this.usersService.updateOne(id, updateUserDto);
     if (user === undefined) {
       throw new NotFoundException();
     } else if (user === 'password') {
