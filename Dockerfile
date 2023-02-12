@@ -5,7 +5,7 @@ FROM node:18-alpine
 EXPOSE 4000
 
 # Create app directory
-WORKDIR /nodejs2022q4/music_lib/src
+WORKDIR /nodejs2022q4/app/src
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -19,4 +19,4 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:dev"]
