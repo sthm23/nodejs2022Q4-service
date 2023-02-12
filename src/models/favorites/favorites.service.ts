@@ -1,12 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { DbService } from 'src/db/db.service';
+import { Repository } from 'typeorm';
+import { FavoritesEntity } from './entities/fav.entity';
 
 @Injectable()
 export class FavoritesService {
-  constructor(@Inject(DbService) private db: DbService) {}
+  constructor(
+    // @InjectRepository(FavoritesEntity)
+    // private favRepo: Repository<FavoritesEntity>,
+    @Inject(DbService) private db: DbService
+    ) {}
 
   getAll() {
     return this.db.favorites;
+    // return this.favRepo.find();
   }
 
   /* TRACKS OPERATION */
