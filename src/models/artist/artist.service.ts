@@ -57,7 +57,7 @@ export class ArtistService {
   async deleteArtist(id: string) {
     // const artist = this.db.artists.find((el) => el.id === id);
     const artist = await this.db.artists.findOne({where:{id}});
-    if (artist === undefined) {
+    if (!artist) {
       return undefined;
     }
     // const artistIndex = this.db.artists.findIndex((el) => el.id === id);
@@ -85,5 +85,6 @@ export class ArtistService {
     // return artist;
 
     await this.db.artists.delete(id)
+    return true
   }
 }
