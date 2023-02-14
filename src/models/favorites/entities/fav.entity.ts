@@ -14,12 +14,7 @@ export class FavoritesEntity {
   @Column()
   albums: AlbumsEntity[];
 
-//   @Column({ default: 1 })
-//   version: number;
-
   @Column()
   tracks: TracksEntity[];
 
-//   @Column()
-//   updatedAt: string;
 }

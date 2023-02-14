@@ -50,9 +50,11 @@ export class AlbumsService {
       return undefined;
     }
 
-    const favAlbumIndex = await this.db.favorites.albums.findOne({where:{id: id}})
-    if (favAlbumIndex) {
-      await this.db.favorites.albums.delete(id)
+    const favAlbumIndex = this.db.favorites.albums.findIndex(
+      (el) => el.id === album.id,
+    );
+    if (favAlbumIndex !== -1) {
+      this.db.favorites.albums.splice(favAlbumIndex, 1);
     }
     const track = await this.db.tracks.findOne({where:{albumId: id}})
     if (track) {

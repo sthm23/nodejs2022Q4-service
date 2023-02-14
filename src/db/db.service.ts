@@ -5,7 +5,6 @@ import { ArtistsEntity } from 'src/models/artist/entities/artists.entity';
 import { TracksEntity } from 'src/models/track/entities/tracks.entity';
 import { UsersEntity } from 'src/models/users/entities/users.entity';
 import { Repository } from 'typeorm';
-import { Album, Artist, Favarite, FavRepoInterface, Track, User } from './interfaces';
 
 @Injectable()
 export class DbService implements OnModuleInit {
@@ -14,9 +13,9 @@ export class DbService implements OnModuleInit {
   public tracks: Repository<TracksEntity>;
   public albums: Repository<AlbumsEntity>;
   public favorites: {
-    artists: Repository<ArtistsEntity>,
-    albums: Repository<AlbumsEntity>,
-    tracks: Repository<TracksEntity>,
+    artists: ArtistsEntity[],
+    albums: AlbumsEntity[],
+    tracks: TracksEntity[],
   };
 
   constructor(
@@ -28,8 +27,6 @@ export class DbService implements OnModuleInit {
     private artistRepo: Repository<ArtistsEntity>,
     @InjectRepository(AlbumsEntity)
     private albumRepo: Repository<AlbumsEntity>,
-    // @InjectRepository(FavoritesEntity)
-    // public favRepo: Repository<FavoritesEntity>,
   ){}
   onModuleInit() {
     this.users = this.usersRepository;
@@ -37,9 +34,9 @@ export class DbService implements OnModuleInit {
     this.artists = this.artistRepo;
     this.albums = this.albumRepo;
     this.favorites = {
-      tracks: this.trackRepo,
-      artists: this.artistRepo,
-      albums: this.albumRepo,
+      tracks: [],
+      artists: [],
+      albums: [],
     }
   }
 
