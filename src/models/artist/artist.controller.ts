@@ -38,7 +38,7 @@ export class ArtistsController {
     id: string,
   ) {
     const artist = await this.artistsService.getOneById(id);
-    if (artist === undefined) {
+    if (!artist) {
       throw new NotFoundException();
     }
     return artist;
@@ -89,7 +89,7 @@ export class ArtistsController {
     id: string,
   ) {
     const art = await this.artistsService.deleteArtist(id);
-    if (art === undefined) {
+    if (!art) {
       throw new NotFoundException();
     }
     return art;
