@@ -70,7 +70,7 @@ export class AlbumsController {
     id: string,
   ) {
     const album = await this.albumsService.updateOne(id, albumDto);
-    if (album === undefined) {
+    if (!album) {
       throw new NotFoundException();
     }
     return album;
@@ -89,9 +89,9 @@ export class AlbumsController {
     id: string,
   ) {
     const album = await this.albumsService.deleteAlbum(id);
-    if (album !== undefined) {
-      return album;
+    if (!album) {
+      throw new NotFoundException();
     }
-    throw new NotFoundException();
+    return album;
   }
 }
