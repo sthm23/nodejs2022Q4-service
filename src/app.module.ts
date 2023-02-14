@@ -8,6 +8,9 @@ import { FavoritesModule } from './models/favorites/favorites.module';
 import { DbModule } from './db/db.module';
 import { UsersEntity } from './models/users/entities/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TracksEntity } from './models/track/entities/tracks.entity';
+import { AlbumsEntity } from './models/albums/entities/album.entity';
+import { ArtistsEntity } from './models/artist/entities/artists.entity';
 
 @Module({
   imports: [
@@ -16,19 +19,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       type: 'postgres',
       host: 'postgres',
       port: 5432,
-      username: 'sthm23',
-      password: 'admin',
-      database: 'music_lib',
-      entities: [UsersEntity],
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PW,
+      database: process.env.POSTGRES_DB,
+      entities: [UsersEntity, TracksEntity, AlbumsEntity, ArtistsEntity],
       synchronize: true,
       autoLoadEntities: true,
     }),
+    DbModule,
+
     UsersModule,
     ArtistModule,
     TrackModule,
     AlbumsModule,
     FavoritesModule,
-    DbModule,
   ],
   controllers: [],
   providers: [],

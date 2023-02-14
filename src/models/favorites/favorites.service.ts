@@ -18,56 +18,53 @@ export class FavoritesService {
   }
 
   /* TRACKS OPERATION */
-  createTrackById(id: string) {
-    const track = this.db.tracks.find((el) => el.id === id);
+  async createTrackById(id: string) {
+    const track = await this.db.tracks.findOne({where: {id}});
     if (track === undefined) {
       return track;
     }
-    this.db.favorites.tracks.push(track);
-    return track;
+    return this.db.favorites.tracks.save(track);
   }
 
-  deleteTrackById(id: string) {
-    const trackInd = this.db.favorites.tracks.findIndex((el) => el.id === id);
-    if (trackInd === -1) {
+  async deleteTrackById(id: string) {
+    const track = await this.db.favorites.tracks.findOne({where: {id}});
+    if (!track) {
       return undefined;
     }
-    return this.db.favorites.tracks.splice(trackInd, 1);
+    return await this.db.favorites.tracks.delete(id)
   }
 
   /* ALBUMS OPERATION */
-  createAlbumById(id: string) {
-    const album = this.db.albums.find((el) => el.id === id);
-    if (album === undefined) {
-      return album;
-    }
-    this.db.favorites.albums.push(album);
-    return album;
-  }
-
-  deleteAlbumById(id: string) {
-    const albums = this.db.favorites.albums.findIndex((el) => el.id === id);
-    if (albums === -1) {
+  async createAlbumById(id: string) {
+    const album = await this.db.albums.findOne({where: {id}});
+    if (!album) {
       return undefined;
     }
-    return this.db.favorites.albums.splice(albums, 1);
+    return this.db.favorites.albums.save(album);
+  }
+
+  async deleteAlbumById(id: string) {
+    const albums = await this.db.favorites.albums.findOne({where: {id}});
+    if (!albums) {
+      return undefined;
+    }
+    return await this.db.favorites.albums.delete(id)
   }
 
   /* ARTIST OPERATION */
-  createArtistById(id: string) {
-    const artist = this.db.artists.find((el) => el.id === id);
-    if (artist === undefined) {
-      return artist;
-    }
-    this.db.favorites.artists.push(artist);
-    return artist;
-  }
-
-  deleteArtistById(id: string) {
-    const artists = this.db.favorites.artists.findIndex((el) => el.id === id);
-    if (artists === -1) {
+  async createArtistById(id: string) {
+    const artist = await this.db.artists.findOne({where: {id}});
+    if (!artist) {
       return undefined;
     }
-    return this.db.favorites.artists.splice(artists, 1);
+    return this.db.favorites.artists.save(artist);
+  }
+
+  async deleteArtistById(id: string) {
+    const artists = await this.db.favorites.artists.findOne({where: {id}});
+    if (!artists) {
+      return undefined;
+    }
+    return await this.db.favorites.artists.delete(id);
   }
 }

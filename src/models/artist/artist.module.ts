@@ -5,7 +5,7 @@ import { ArtistService } from './artist.service';
 import { ArtistsEntity } from './entities/artists.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ArtistsEntity])],
+  // imports: [TypeOrmModule.forFeature([ArtistsEntity])],
   controllers: [ArtistsController],
   providers: [ArtistService],
   exports: [ArtistService],

@@ -21,13 +21,13 @@ export class TracksController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  gettracks() {
-    return this.tracksService.getAll();
+  async gettracks() {
+    return await this.tracksService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  gettrack(
+  async gettrack(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -37,19 +37,19 @@ export class TracksController {
     )
     id: string,
   ) {
-    const track = this.tracksService.getOneById(id);
-    if (!track) {
-      throw new NotFoundException();
+    const track = await this.tracksService.getOneById(id);
+    if (track) {
+      return track;
     }
-    return track;
+    throw new NotFoundException();
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createtrack(
+  async createtrack(
     @Body(new TracksValidatePipe(TracksSchema)) createtrackDto: TracksDto,
   ) {
-    const track = this.tracksService.create(createtrackDto);
+    const track = await this.tracksService.create(createtrackDto);
     if (track === undefined) {
       throw new NotFoundException();
     }
@@ -58,7 +58,7 @@ export class TracksController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updatetrack(
+  async updatetrack(
     @Body(new TracksValidatePipe(TracksSchema)) trackDto: TracksDto,
     @Param(
       'id',
@@ -69,7 +69,7 @@ export class TracksController {
     )
     id: string,
   ) {
-    const track = this.tracksService.updateOne(id, trackDto);
+    const track = await this.tracksService.updateOne(id, trackDto);
     if (track === undefined) {
       throw new NotFoundException();
     }
@@ -78,7 +78,7 @@ export class TracksController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deletetrack(
+  async deletetrack(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -88,7 +88,7 @@ export class TracksController {
     )
     id: string,
   ) {
-    const track = this.tracksService.deleteTrack(id);
+    const track = await this.tracksService.deleteTrack(id);
     if (track === undefined) {
       throw new NotFoundException();
     }

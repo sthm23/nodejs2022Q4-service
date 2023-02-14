@@ -1,3 +1,8 @@
+import { AlbumsEntity } from "src/models/albums/entities/album.entity";
+import { ArtistsEntity } from "src/models/artist/entities/artists.entity";
+import { TracksEntity } from "src/models/track/entities/tracks.entity";
+import { Repository } from "typeorm";
+
 export interface Album {
   id: string; // uuid v4
   name: string;
@@ -31,4 +36,14 @@ export interface Favarite {
   artists: Artist[]; // favorite artists ids
   albums: Album[]; // favorite albums ids
   tracks: Track[]; // favorite tracks ids
+}
+
+// export interface users:Repository<UsersEntity>;
+// public artists: Repository<ArtistsEntity>;
+// public tracks: Repository<TracksEntity>;
+// public albums: Repository<AlbumsEntity>;
+export interface FavRepoInterface {
+  artists: Repository<ArtistsEntity>,
+  albums: Repository<AlbumsEntity>,
+  tracks: Repository<TracksEntity>,
 }

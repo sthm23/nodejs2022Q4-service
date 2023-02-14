@@ -23,13 +23,13 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getUsers() {
-    return this.usersService.getAll();
+  async getUsers() {
+    return await this.usersService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getUser(
+  async getUser(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -39,19 +39,19 @@ export class UsersController {
     )
     id: string,
   ) {
-    const user = this.usersService.getOneById(id);
-    if (!user) {
-      throw new NotFoundException();
+    const user = await this.usersService.getOneById(id);
+    if (user) {
+      return user;
     }
-    return user;
+    throw new NotFoundException();
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(
+  async createUser(
     @Body(new UserValidatePipe(createUserSchema)) createUserDto: CreateUserDto,
   ) {
-    return this.usersService.create(createUserDto);
+    return await this.usersService.create(createUserDto);
   }
 
   @Put(':id')
@@ -78,7 +78,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteUser(
+  async deleteUser(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -88,8 +88,8 @@ export class UsersController {
     )
     id: string,
   ) {
-    const user = this.usersService.deleteUser(id);
-    if (user === undefined) {
+    const user = await this.usersService.deleteUser(id);
+    if (!user) {
       throw new NotFoundException();
     }
   }
