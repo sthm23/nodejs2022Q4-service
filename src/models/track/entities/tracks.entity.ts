@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn,  } from 'typeorm';
+import { AlbumsEntity } from 'src/models/albums/entities/album.entity';
+import { ArtistsEntity } from 'src/models/artist/entities/artists.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Relation,  } from 'typeorm';
 
 @Entity()
 export class TracksEntity {
@@ -8,12 +10,20 @@ export class TracksEntity {
   @Column()
   name: string;
 
+  @ManyToOne(() => ArtistsEntity, { nullable: true, onDelete: 'SET NULL'})
+  @JoinColumn()
+  artist: Relation<ArtistsEntity>
+
   @Column({nullable: true})
-  artistId: string;
+  artistId: ArtistsEntity['id'] | null;
+
+  @ManyToOne(() => AlbumsEntity, { nullable: true, onDelete: 'SET NULL'})
+  @JoinColumn()
+  album: Relation<AlbumsEntity>
 
   @Column({ nullable: true })
-  albumId: string;
+  albumId: AlbumsEntity['id'] | null;
 
-  @Column()
+  @Column('int')
   duration: number;
 }

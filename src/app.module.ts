@@ -18,13 +18,15 @@ import { ArtistsEntity } from './models/artist/entities/artists.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'postgres',
-      port: 5432,
+      port: +process.env.POSTGRES_PORT,
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PW,
       database: process.env.POSTGRES_DB,
       entities: [UsersEntity, TracksEntity, AlbumsEntity, ArtistsEntity],
       synchronize: true,
       autoLoadEntities: true,
+      logging: true,
+      migrations: []
     }),
     DbModule,
 

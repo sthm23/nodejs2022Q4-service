@@ -3,8 +3,6 @@ import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist } from './interfeces/artist.interface';
 import { DbService } from 'src/db/db.service';
-import { Track } from 'src/db/interfaces';
-import { AlbumsEntity } from '../albums/entities/album.entity';
 
 @Injectable()
 export class ArtistService {
@@ -54,18 +52,6 @@ export class ArtistService {
       this.db.favorites.artists.splice(favArtInd, 1);
     }
 
-    const albumInd = await this.db.albums.findOne({where:{artistId: id}});
-    if (albumInd) {
-      const obj = { ...albumInd, artistId: null } as AlbumsEntity;
-      await this.db.albums.save(obj)
-    }
-
-    const trackInd = await this.db.tracks.findOne({where:{artistId: id}});
-    if (trackInd) {
-      const obj = { ...trackInd, artistId: null } as Track;
-
-      await this.db.tracks.save(obj);
-    }
     await this.db.artists.delete(id)
     return true
   }

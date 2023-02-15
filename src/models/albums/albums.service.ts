@@ -56,11 +56,7 @@ export class AlbumsService {
     if (favAlbumIndex !== -1) {
       this.db.favorites.albums.splice(favAlbumIndex, 1);
     }
-    const track = await this.db.tracks.findOne({where:{albumId: id}})
-    if (track) {
-      const obj = { ...track, albumId: null } as Track;
-      await this.db.tracks.save(obj);
-    }
+
     await this.db.albums.delete(id);
     return true
   }

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn,  } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Relation,  } from 'typeorm';
 
 @Entity()
 export class ArtistsEntity {
@@ -10,4 +10,6 @@ export class ArtistsEntity {
 
   @Column()
   grammy: boolean;
+
+
 }
