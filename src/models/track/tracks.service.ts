@@ -19,22 +19,8 @@ export class TracksService {
   }
 
   async create(dto: TracksDto) {
-    const newtrack = { id: uuidv4(), ...dto } as TracksEntity;
-
-    const art = this.db.artists.findOne({where:{id: dto.artistId}});
-    const album = this.db.albums.findOne({where:{id: dto.albumId}});
-
-    if (album === undefined && dto.albumId !== null) {
-      return undefined;
-    }
-
-    if (art === undefined && dto.artistId !== null) {
-      return undefined;
-    }
-    const track = this.db.tracks.create(newtrack);
+    const track = this.db.tracks.create(dto);
     return this.db.tracks.save(track);
-
-
   }
 
   async updateOne(id: string, dto: TracksDto) {

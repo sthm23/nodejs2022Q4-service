@@ -22,13 +22,8 @@ export class ArtistService {
     return artist
   }
 
-  create({ grammy, name }: ArtistDto) {
-    const newArtist = {
-      id: uuidv4(),
-      grammy,
-      name,
-    } as Artist;
-    const artist = this.db.artists.create(newArtist);
+  create(dto: ArtistDto) {
+    const artist = this.db.artists.create(dto);
     return this.db.artists.save(artist);
   }
 

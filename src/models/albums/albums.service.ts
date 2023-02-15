@@ -22,12 +22,7 @@ export class AlbumsService {
   }
 
   async create(dto: AlbumsDto) {
-    const newAlbum = { id: uuidv4(), ...dto } as Album;
-    const artist = await this.db.artists.findOne({where: {id: dto.artistId}});
-    if (artist === undefined && dto.artistId !== null) {
-      return undefined;
-    }
-    const album = this.db.albums.create(newAlbum);
+    const album = this.db.albums.create(dto);
     return this.db.albums.save(album);
   }
 
