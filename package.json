@@ -10,6 +10,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "docker": "docker-compose up --build",
+    "docker:scan": "docker scan nodejs2022q4_postgres & docker scan nodejs2022q4_node",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "docker:scan": "docker scan nodejs2022q4_postgres & docker scan nodejs2022q4_node",

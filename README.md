@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone [{repository URL}](https://github.com/sthm23/nodejs2022Q4-service.git)
+git clone https://github.com/sthm23/nodejs2022Q4-service.git
 ```
 
 ## Installing NPM modules
@@ -22,6 +22,18 @@ npm install
 ```
 npm start
 ```
+
+## Running application in docker container
+
+```
+npm run docker
+```
+- !!! You need to create an .env file for the project to start correctly. You will be able to change the file .env.example to the correct one (.env)
+```
+npm run docker:scan
+```
+##### To check origin images in docker hub click to [link](https://hub.docker.com/repository/docker/sthm23/nodejs2022q4/tags?page=1&ordering=last_updated)
+
 
 After starting the app on port (4000 as default) (you can .env file past your port) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
