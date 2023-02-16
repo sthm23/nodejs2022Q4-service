@@ -28,7 +28,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PW}
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - ${POSTGRES_PORT}:${POSTGRES_DEFAULT_PORT}
     volumes:
       - datapg:/var/lib/postgresql/data
 networks:
