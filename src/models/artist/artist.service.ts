@@ -42,11 +42,6 @@ export class ArtistService {
       return undefined;
     }
 
-    const favArtInd = this.db.favorites.artists.findIndex((el) => el.id === id);
-    if (favArtInd !== -1) {
-      this.db.favorites.artists.splice(favArtInd, 1);
-    }
-
     await this.db.artists.delete(id)
     return true
   }

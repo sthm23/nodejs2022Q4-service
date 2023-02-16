@@ -47,10 +47,7 @@ export class TracksService {
     if (!track) {
       return undefined;
     }
-    const ind = this.db.favorites.tracks.findIndex((el) => el.id === id);
-    if (ind !== -1) {
-      this.db.favorites.tracks.splice(ind, 1);
-    }
+
     await this.db.tracks.delete(id);
     return true
   }

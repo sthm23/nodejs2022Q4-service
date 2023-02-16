@@ -44,14 +44,7 @@ export class AlbumsService {
     if (!album) {
       return undefined;
     }
-
-    const favAlbumIndex = this.db.favorites.albums.findIndex(
-      (el) => el.id === album.id,
-    );
-    if (favAlbumIndex !== -1) {
-      this.db.favorites.albums.splice(favAlbumIndex, 1);
-    }
-
+    
     await this.db.albums.delete(id);
     return true
   }

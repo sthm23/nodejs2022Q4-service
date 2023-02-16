@@ -1,20 +1,24 @@
+import { Exclude } from 'class-transformer';
 import { AlbumsEntity } from 'src/models/albums/entities/album.entity';
 import { ArtistsEntity } from 'src/models/artist/entities/artists.entity';
 import { TracksEntity } from 'src/models/track/entities/tracks.entity';
-import { Entity, Column, PrimaryGeneratedColumn,  } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable,  } from 'typeorm';
 
 @Entity()
-export class FavoritesEntity {
-  @PrimaryGeneratedColumn()
+export class FavoriteEntity  {
+  @PrimaryGeneratedColumn('uuid')
+  @Exclude()
   id: string;
 
-  @Column()
-  artists: ArtistsEntity[];
+  @ManyToMany(() => AlbumsEntity, {eager: true})
+  @JoinTable()
+  albums: Array<AlbumsEntity>;
 
-  @Column()
-  albums: AlbumsEntity[];
+  @ManyToMany(() => ArtistsEntity, {eager: true})
+  @JoinTable()
+  artists: Array<ArtistsEntity>;
 
-  @Column()
-  tracks: TracksEntity[];
-
+  @ManyToMany(() => TracksEntity, {eager: true})
+  @JoinTable()
+  tracks: Array<TracksEntity>;
 }

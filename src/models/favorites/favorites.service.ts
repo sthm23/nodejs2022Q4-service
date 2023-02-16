@@ -7,8 +7,21 @@ export class FavoritesService {
     @Inject(DbService) private db: DbService
     ) {}
 
-  getAll() {
-    return this.db.favorites;
+  async getAll() {
+    const favArr = await this.db.favorites.find({relations: {
+      albums: true,
+      artists: true,
+      tracks: true
+    }})
+    if(favArr.length === 0) {
+     const fav = await this.db.favorites.save({
+        albums: [],
+        artists: [],
+        tracks: [],
+      })
+      return fav
+    }
+     return favArr[0];
   }
 
   /* TRACKS OPERATION */
@@ -17,16 +30,22 @@ export class FavoritesService {
     if (!track) {
       return undefined;
     }
-    this.db.favorites.tracks.push(track);
+    const fav = await this.getAll();
+    fav.tracks.push(track);
+    await this.db.favorites.save(fav);
     return track
   }
 
   async deleteTrackById(id: string) {
-    const trackInd = this.db.favorites.tracks.findIndex((el) => el.id === id);
-    if (trackInd === -1) {
+    const trackInd = await this.db.tracks.findOneBy({id});
+    if (!trackInd) {
       return undefined;
     }
-    return this.db.favorites.tracks.splice(trackInd, 1);
+    const fav = await this.getAll();
+    const trackFilter = fav.tracks.filter(el=> el.id !== id);
+    fav.tracks = trackFilter
+    await this.db.favorites.save(fav);
+    return true
   }
 
   /* ALBUMS OPERATION */
@@ -35,16 +54,22 @@ export class FavoritesService {
     if (!album) {
       return undefined;
     }
-    this.db.favorites.albums.push(album);
+    const fav = await this.getAll();
+    fav.albums.push(album);
+    await this.db.favorites.save(fav);
     return album;
   }
 
   async deleteAlbumById(id: string) {
-    const albums = this.db.favorites.albums.findIndex((el) => el.id === id);
-    if (albums === -1) {
+    const albums = await this.db.albums.findOneBy({id});
+    if (!albums) {
       return undefined;
     }
-    return this.db.favorites.albums.splice(albums, 1);
+    const fav = await this.getAll();
+    const filterAlbum = fav.albums.filter(el=> el.id !== id);
+    fav.albums = filterAlbum;
+    await this.db.favorites.save(fav);
+    return true
   }
 
   /* ARTIST OPERATION */
@@ -53,15 +78,21 @@ export class FavoritesService {
     if (!artist) {
       return undefined;
     }
-    this.db.favorites.artists.push(artist);
+    const fav = await this.getAll();
+    fav.artists.push(artist);
+    await this.db.favorites.save(fav);
     return artist;
   }
 
   async deleteArtistById(id: string) {
-    const artists = this.db.favorites.artists.findIndex((el) => el.id === id);
-    if (artists === -1) {
+    const artists = await this.db.artists.findOneBy({id});
+    if (!artists) {
       return undefined;
     }
-    return this.db.favorites.artists.splice(artists, 1);
+    const fav = await this.getAll();
+    const filterAlbum = fav.artists.filter(el=> el.id !== id);
+    fav.artists = filterAlbum;
+    await this.db.favorites.save(fav);
+    return true
   }
 }
