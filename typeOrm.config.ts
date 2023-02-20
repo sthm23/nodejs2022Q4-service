@@ -10,7 +10,7 @@ import { migrationFile1676905919135 } from './migrations/1676905919135-migration
 const dataSource = new DataSource({
   type: 'postgres',
   host: 'localhost',
-  port: 5432,
+  port: +process.env.POSTGRES_PORT,
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PW,
   database: process.env.POSTGRES_DB,
