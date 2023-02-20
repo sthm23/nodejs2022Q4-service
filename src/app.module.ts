@@ -24,10 +24,10 @@ import { FavoriteEntity } from './models/favorites/entities/fav.entity';
       password: process.env.POSTGRES_PW,
       database: process.env.POSTGRES_DB,
       entities: [UsersEntity, TracksEntity, AlbumsEntity, ArtistsEntity, FavoriteEntity],
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true,
       // logging: true,
-      migrations: []
+      // migrations: []
     }),
     DbModule,
 

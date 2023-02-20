@@ -19,4 +19,7 @@ export class UsersEntity {
 
   @Column()
   updatedAt: string;
+
+  @Column()
+  city: string;
 }
