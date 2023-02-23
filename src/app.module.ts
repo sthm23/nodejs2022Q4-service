@@ -12,6 +12,7 @@ import { TracksEntity } from './models/track/entities/tracks.entity';
 import { AlbumsEntity } from './models/albums/entities/album.entity';
 import { ArtistsEntity } from './models/artist/entities/artists.entity';
 import { FavoriteEntity } from './models/favorites/entities/fav.entity';
+import { AuthModule } from './models/auth/auth.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { FavoriteEntity } from './models/favorites/entities/fav.entity';
       // migrations: []
     }),
     DbModule,
-
+    AuthModule,
     UsersModule,
     ArtistModule,
     TrackModule,
