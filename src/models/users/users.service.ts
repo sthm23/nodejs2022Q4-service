@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -30,10 +31,11 @@ export class UsersService {
 
   async create(dto: CreateUserDto) {
     const now = Date.now().toString();
+    const pas = bcrypt.hashSync(dto.password, 10);
     const newUser = {
       id: uuidv4(),
       login: dto.login,
-      password: dto.password,
+      password: pas,
       version: 1,
       createdAt: now,
       updatedAt: now,
@@ -52,16 +54,18 @@ export class UsersService {
 
   async updateOne(id: string, dto: UpdateUserDTO) {
     const user = await this.db.users.findOneBy({ id });
+    const isValid = bcrypt.compareSync(dto.oldPassword, user.password);
+
     if (!user) {
       return undefined;
     }
-    if (user.password !== dto.oldPassword) {
+    if (!isValid) {
       return 'password';
     }
     const updUser = {
       id: user.id,
       login: user.login,
-      password: dto.newPassword,
+      password: bcrypt.hashSync(dto.newPassword, 10),
       version: ++user.version,
       createdAt: user.createdAt,
       updatedAt: new Date().getTime().toString(),

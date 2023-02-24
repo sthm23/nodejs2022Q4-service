@@ -2,5 +2,12 @@
 
 export interface Payload {
     login: string;
-    sub: string;
-  }
+    id: string;
+}
+
+export interface PayloadData {
+    userId:string
+    login: string,
+    iat:number,
+    exp: number
+}

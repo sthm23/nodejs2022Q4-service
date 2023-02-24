@@ -25,7 +25,7 @@ import { AuthModule } from './models/auth/auth.module';
       password: process.env.POSTGRES_PW,
       database: process.env.POSTGRES_DB,
       entities: [UsersEntity, TracksEntity, AlbumsEntity, ArtistsEntity, FavoriteEntity],
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       // logging: true,
       // migrations: []

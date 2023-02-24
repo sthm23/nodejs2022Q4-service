@@ -1,8 +1,8 @@
 import * as Joi from 'joi';
 
 export interface AuthDto {
+    login: string;
     password: string;
-    login: number;
 }
 
 export const AuthSchema = Joi.object({

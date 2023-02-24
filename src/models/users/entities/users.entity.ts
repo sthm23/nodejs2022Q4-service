@@ -20,6 +20,6 @@ export class UsersEntity {
   @Column()
   updatedAt: string;
 
-  @Column()
-  city: string;
+  @Column({nullable: true})
+  refToken: string;
 }
