@@ -18,7 +18,6 @@ export class AuthController {
         return this.authService.login(body);
     }
 
-    @UseGuards(AccessTokenGuard)
     @Post('signup')
     @HttpCode(200)
     createProfile(@Body(new AuthPipe(AuthSchema)) body: AuthDto) {
