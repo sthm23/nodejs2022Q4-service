@@ -13,17 +13,19 @@ export class AuthController {
     }
 
     @Post('login')
+    @HttpCode(201)
     loginPlatform(@Body(new AuthPipe(AuthSchema)) body: AuthDto) {
         return this.authService.login(body);
     }
 
     @UseGuards(AccessTokenGuard)
     @Post('signup')
+    @HttpCode(200)
     createProfile(@Body(new AuthPipe(AuthSchema)) body: AuthDto) {
         return this.authService.register(body)
     }
 
-    // @UseGuards(AccessTokenGuard)
+    @UseGuards(AccessTokenGuard)
     @Post('refresh')
     @HttpCode(200)
     refreshToken(@Body(new ValidationPipe()) body: AuthRefTokenDto) {

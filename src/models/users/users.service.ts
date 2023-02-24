@@ -54,11 +54,11 @@ export class UsersService {
 
   async updateOne(id: string, dto: UpdateUserDTO) {
     const user = await this.db.users.findOneBy({ id });
-    const isValid = bcrypt.compareSync(dto.oldPassword, user.password);
-
     if (!user) {
       return undefined;
     }
+
+    const isValid = bcrypt.compareSync(dto.oldPassword, user.password);
     if (!isValid) {
       return 'password';
     }
@@ -84,7 +84,7 @@ export class UsersService {
     const user = await this.db.users.findOneBy({ id });
     if (!user) {
       return undefined;
-    }    
+    }
     await this.db.users.delete(id);
     return true
   }
