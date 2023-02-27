@@ -12,14 +12,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   exports: [UsersService],
 })
 export class UsersModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(UsersMiddleware)
-      .forRoutes(
-        { path: 'user/:id', method: RequestMethod.GET },
-        { path: 'user', method: RequestMethod.POST },
-        { path: 'user/:id', method: RequestMethod.PUT },
-        { path: 'user/:id', method: RequestMethod.DELETE },
-      );
-  }
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(UsersMiddleware)
+  //     .forRoutes(
+  //       { path: 'user/:id', method: RequestMethod.GET },
+  //       { path: 'user', method: RequestMethod.POST },
+  //       { path: 'user/:id', method: RequestMethod.PUT },
+  //       { path: 'user/:id', method: RequestMethod.DELETE },
+  //     );
+  // }
 }

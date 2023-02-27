@@ -13,6 +13,7 @@ import { AlbumsEntity } from './models/albums/entities/album.entity';
 import { ArtistsEntity } from './models/artist/entities/artists.entity';
 import { FavoriteEntity } from './models/favorites/entities/fav.entity';
 import { AuthModule } from './models/auth/auth.module';
+import { LoggerModule } from './models/logger/logger.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AuthModule } from './models/auth/auth.module';
     TrackModule,
     AlbumsModule,
     FavoritesModule,
+    LoggerModule
   ],
   controllers: [],
   providers: [],

@@ -4,9 +4,15 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { readFile } from 'node:fs/promises';
 import * as yaml from 'js-yaml';
+import { MyLogger } from './models/logger/myloger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  
+  app.useLogger(app.get(MyLogger));
+
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('PORT') || 4000;
 
