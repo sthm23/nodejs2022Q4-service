@@ -1,10 +1,11 @@
 import { ConsoleLogger } from '@nestjs/common';
+import { LEVELS } from './level.logger';
 import { logger } from './logger';
 
 export class MyLogger extends ConsoleLogger {
   constructor() {
     super();
-    this.setLogLevels(['log', 'error', 'warn'],);
+    this.setLogLevels(LEVELS[process.env.LOG_LEVEL_MID]);
   }
   static lastLog = Date.now();
 

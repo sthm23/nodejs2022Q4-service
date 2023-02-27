@@ -31,7 +31,7 @@ export class UsersService {
 
   async create(dto: CreateUserDto) {
     const now = Date.now().toString();
-    const pas = bcrypt.hashSync(dto.password, 10);
+    const pas = bcrypt.hashSync(dto.password, +process.env.CRYPT_SALT);
     const newUser = {
       id: uuidv4(),
       login: dto.login,
@@ -65,7 +65,7 @@ export class UsersService {
     const updUser = {
       id: user.id,
       login: user.login,
-      password: bcrypt.hashSync(dto.newPassword, 10),
+      password: bcrypt.hashSync(dto.newPassword, +process.env.CRYPT_SALT),
       version: ++user.version,
       createdAt: user.createdAt,
       updatedAt: new Date().getTime().toString(),

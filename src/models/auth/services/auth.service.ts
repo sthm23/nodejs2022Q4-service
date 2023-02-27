@@ -27,7 +27,7 @@ export class AuthService {
 
     async register(dto: AuthDto) {
         const now = Date.now().toString();
-        const pas = bcrypt.hashSync(dto.password, 10);
+        const pas = bcrypt.hashSync(dto.password, +process.env.CRYPT_SALT);
         const newUserDto = {
           login: dto.login,
           password: pas,
@@ -69,14 +69,14 @@ export class AuthService {
                 login: login
             }, {
                 secret: process.env.JWT_SECRET_KEY,
-                expiresIn: 60 * 10,
+                expiresIn: 60 * 60 * +process.env.TOKEN_EXPIRE_TIME,
             }),
             this.jwtServ.sign({
                 userId: id,
                 login: login
             }, {
                 secret: process.env.JWT_SECRET_REFRESH_KEY,
-                expiresIn: 60 * 60 * 10,
+                expiresIn: 60 * 60 * +process.env.TOKEN_REFRESH_EXPIRE_TIME,
             })
         ]);
         return {
@@ -87,7 +87,7 @@ export class AuthService {
     }
 
     async refTokenChangeToHush(userId: string, refToken: string) {
-        const hash = await bcrypt.hash(refToken, 10);
+        const hash = await bcrypt.hash(refToken, +process.env.CRYPT_SALT);
     
         await this.db.users.update(userId, {
           refToken: hash,
