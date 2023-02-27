@@ -22,13 +22,13 @@ export class AuthService {
         if(!isValid)throw new ForbiddenException()
         const tokens = await this.getToken(user.id, user.login);
         await this.refTokenChangeToHush(user.id, tokens.refreshToken);
-        return tokens;
+        return tokens
     }
 
     async register(dto: AuthDto) {
         const now = Date.now().toString();
         const pas = bcrypt.hashSync(dto.password, 10);
-        const newUser = {
+        const newUserDto = {
           login: dto.login,
           password: pas,
           version: 1,
@@ -37,11 +37,11 @@ export class AuthService {
           refToken: null
         };
 
-        const user = this.db.users.create(newUser);
-        await this.db.users.save(user)
+        const user = this.db.users.create(newUserDto);
+        const newUser = await this.db.users.save(user)
         return {
-            msg: 'user successfully created'
-        }
+            id: newUser.id
+        };
     }
 
     async refreshToken(body: {refreshToken:string}) {
@@ -80,6 +80,7 @@ export class AuthService {
             })
         ]);
         return {
+            userId: id,
             accessToken: at,
             refreshToken: rt
         }
