@@ -34,7 +34,6 @@ export class MyLogger extends ConsoleLogger {
   verbose(message: any, context) {
     // logger(message, context, 'VERBOSE');
     console.log(message, context, 'VERBOSE');
-    
     super.verbose(message, context);
   }
 }
