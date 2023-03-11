@@ -1,50 +1,60 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './interfeces/users.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { DbService } from 'src/db/db.service';
 import { Inject } from '@nestjs/common/decorators';
+import { UsersEntity } from './entities/users.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject(DbService) private db: DbService) {}
+  constructor(
+    @Inject(DbService) private db: DbService
+    ) {}
 
-  getAll() {
-    return this.db.users.map((el) => {
+  async getAll() {
+    return (await this.db.users.find()).map((el) => {
       const { password, ...res } = el;
       return res;
     });
   }
 
-  getOneById(id: string) {
-    const user = this.db.users
-      .map(({ password, ...res }) => res)
-      .find((el) => el.id === id);
-    return user;
+  async getOneById(id: string) {
+    const user = (await this.db.users.findOneBy({ id }));
+    if(!user) {
+      return undefined
+    }
+    const {password, ...res} = user;
+    return res;
   }
 
-  create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto) {
+    const now = Date.now().toString();
     const newUser = {
       id: uuidv4(),
       login: dto.login,
       password: dto.password,
       version: 1,
-      createdAt: new Date().getTime(),
-      updatedAt: new Date().getTime(),
-    } as User;
+      createdAt: now,
+      updatedAt: now,
+    } as UsersEntity;
 
-    this.db.users.push(newUser);
+    const user = this.db.users.create(newUser);
+    const userne = await this.db.users.save(user);
     const { password, ...res } = newUser;
-    return res;
+
+    return {
+      ...res,
+      createdAt: +userne.createdAt,
+      updatedAt: +userne.updatedAt,
+    };
   }
 
-  updateOne(id: string, dto: UpdateUserDTO) {
-    const user = this.db.users.find((el) => el.id === id);
-    if (user === undefined) {
-      return user;
+  async updateOne(id: string, dto: UpdateUserDTO) {
+    const user = await this.db.users.findOneBy({ id });
+    if (!user) {
+      return undefined;
     }
-    const userIndex = this.db.users.findIndex((el) => el.id === id);
     if (user.password !== dto.oldPassword) {
       return 'password';
     }
@@ -54,22 +64,24 @@ export class UsersService {
       password: dto.newPassword,
       version: ++user.version,
       createdAt: user.createdAt,
-      updatedAt: new Date().getTime(),
-    } as User;
+      updatedAt: new Date().getTime().toString(),
+    } as UsersEntity;
+    const updedUser = await this.db.users.save(updUser);
+    const { password, ...res } = updedUser;
+    return {
+      ...res,
+      createdAt: +updedUser.createdAt,
+      updatedAt: +updedUser.updatedAt,
+    };
 
-    this.db.users.splice(userIndex, 1, updUser);
-    const { password, ...res } = updUser;
-    return res;
   }
 
-  deleteUser(id: string) {
-    const user = this.db.users.find((el) => el.id === id);
-    if (user == undefined) {
+  async deleteUser(id: string) {
+    const user = await this.db.users.findOneBy({ id });
+    if (!user) {
       return undefined;
-    }
-    const userIndex = this.db.users.findIndex((el) => el.id === id);
-    this.db.users.splice(userIndex, 1);
-    const { password, ...res } = user;
-    return res;
+    }    
+    await this.db.users.delete(id);
+    return true
   }
 }

@@ -21,13 +21,13 @@ export class ArtistsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getartists() {
-    return this.artistsService.getAll();
+  async getartists() {
+    return await this.artistsService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getartist(
+  async getartist(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -37,8 +37,8 @@ export class ArtistsController {
     )
     id: string,
   ) {
-    const artist = this.artistsService.getOneById(id);
-    if (artist === undefined) {
+    const artist = await this.artistsService.getOneById(id);
+    if (!artist) {
       throw new NotFoundException();
     }
     return artist;
@@ -46,10 +46,10 @@ export class ArtistsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createartist(
+  async createartist(
     @Body(new ArtistValidatePipe(ArtistSchema)) createartistDto: ArtistDto,
   ) {
-    const art = this.artistsService.create(createartistDto);
+    const art = await this.artistsService.create(createartistDto);
     if (art === undefined) {
       throw new NotFoundException();
     }
@@ -58,7 +58,7 @@ export class ArtistsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateartist(
+  async updateartist(
     @Body(new ArtistValidatePipe(ArtistSchema)) artistDto: ArtistDto,
     @Param(
       'id',
@@ -69,7 +69,7 @@ export class ArtistsController {
     )
     id: string,
   ) {
-    const artist = this.artistsService.updateOne(id, artistDto);
+    const artist = await this.artistsService.updateOne(id, artistDto);
     if (artist === undefined) {
       throw new NotFoundException();
     }
@@ -78,7 +78,7 @@ export class ArtistsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteartist(
+  async deleteartist(
     @Param(
       'id',
       new ParseUUIDPipe({
@@ -88,8 +88,8 @@ export class ArtistsController {
     )
     id: string,
   ) {
-    const art = this.artistsService.deleteArtist(id);
-    if (art === undefined) {
+    const art = await this.artistsService.deleteArtist(id);
+    if (!art) {
       throw new NotFoundException();
     }
     return art;

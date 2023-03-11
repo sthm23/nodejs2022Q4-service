@@ -1,67 +1,54 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TracksDto } from './dto/tracks.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { Track } from './interfeces/tracks.interface';
 import { DbService } from 'src/db/db.service';
+import { TracksEntity } from './entities/tracks.entity';
 
 @Injectable()
 export class TracksService {
-  constructor(@Inject(DbService) private db: DbService) {}
+  constructor(
+    @Inject(DbService) private db: DbService
+    ) {}
 
-  getAll() {
-    return this.db.tracks;
+  getAll():Promise<TracksEntity[]> {
+    return this.db.tracks.find();
   }
 
   getOneById(id: string) {
-    const track = this.db.tracks.find((el) => el.id === id);
-    return track;
+    return this.db.tracks.findOne({where:{id}});
   }
 
-  create(dto: TracksDto) {
-    const newtrack = { ...dto } as Track;
-    newtrack.id = uuidv4();
-    const art = this.db.artists.find((el) => el.id === dto.artistId);
-    const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if (album === undefined && dto.albumId !== null) {
-      return undefined;
-    }
-    if (art === undefined && dto.artistId !== null) {
-      return undefined;
-    }
-    this.db.tracks.push(newtrack);
-    return newtrack;
+  async create(dto: TracksDto) {
+    const track = this.db.tracks.create(dto);
+    return this.db.tracks.save(track);
   }
 
-  updateOne(id: string, dto: TracksDto) {
-    const track = this.db.tracks.find((el) => el.id === id);
-    const art = this.db.artists.find((el) => el.id === dto.artistId);
-    const album = this.db.albums.find((el) => el.id === dto.albumId);
-    if (album === undefined && dto.albumId !== null) {
+  async updateOne(id: string, dto: TracksDto) {
+    const track = await this.db.tracks.findOne({where:{id}});
+
+    const art = this.db.artists.findOne({where:{id: dto.artistId}});
+    const album = this.db.albums.findOne({where:{id: dto.albumId}});
+    if (!album && dto.albumId !== null) {
       return undefined;
     }
-    if (art === undefined && dto.artistId !== null) {
+    if (!art && dto.artistId !== null) {
       return undefined;
     }
-    if (track === undefined) {
+    if (!track) {
       return undefined;
     }
-    const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
-    const updtrack = { ...track, ...dto } as Track;
-    this.db.tracks.splice(trackIndex, 1, updtrack);
-    return updtrack;
+
+    const updTrack = { ...track, ...dto } as TracksEntity;
+    return this.db.tracks.save(updTrack);
   }
 
-  deleteTrack(id: string) {
-    const track = this.db.tracks.find((el) => el.id === id);
-    if (track === undefined) {
+  async deleteTrack(id: string) {
+    const track = await this.db.tracks.findOne({where:{id}});
+    if (!track) {
       return undefined;
     }
-    const trackIndex = this.db.tracks.findIndex((el) => el.id === id);
-    this.db.tracks.splice(trackIndex, 1);
-    const ind = this.db.favorites.tracks.findIndex((el) => el.id === id);
-    if (ind !== -1) {
-      this.db.favorites.tracks.splice(ind, 1);
-    }
-    return track;
+
+    await this.db.tracks.delete(id);
+    return true
   }
 }

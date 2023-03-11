@@ -28,8 +28,7 @@ npm start
 ```
 npm run docker
 ```
-to run npm script for vulnerabilities scanning
-
+- !!! You need to create an .env file for the project to start correctly. You will be able to change the file .env.example to the correct one (.env)
 ```
 npm run docker:scan
 ```

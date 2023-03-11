@@ -7,64 +7,45 @@ import { Track } from 'src/db/interfaces';
 
 @Injectable()
 export class AlbumsService {
-  constructor(@Inject(DbService) private db: DbService) {}
+  constructor(
+    @Inject(DbService) private db: DbService
+    ) {}
 
   getAll() {
-    return this.db.albums;
+    return this.db.albums.find();
   }
 
   getOneById(id: string) {
-    const album = this.db.albums.find((el) => el.id === id);
+    const album = this.db.albums.findOne({where: {id}});
+    if(!album) return undefined
     return album;
   }
 
-  create(dto: AlbumsDto) {
-    const newAlbum = { ...dto } as Album;
-    newAlbum.id = uuidv4();
-    const artist = this.db.artists.find((el) => el.id === dto.artistId);
-    if (artist === undefined && dto.artistId !== null) {
-      return undefined;
-    }
-    this.db.albums.push(newAlbum);
-    return newAlbum;
+  async create(dto: AlbumsDto) {
+    const album = this.db.albums.create(dto);
+    return this.db.albums.save(album);
   }
 
-  updateOne(id: string, dto: AlbumsDto) {
-    const album = this.db.albums.find((el) => el.id === id);
-    if (album === undefined) {
+  async updateOne(id: string, dto: AlbumsDto) {
+    const album =  await this.db.albums.findOne({where: {id}});
+    if (!album) {
       return album;
     }
-    const albumIndex = this.db.albums.findIndex((el) => el.id === id);
-    const artist = this.db.artists.find((el) => el.id === dto.artistId);
-    if (artist === undefined && dto.artistId !== null) {
+    const artist = await this.db.artists.findOne({where: {id: dto.artistId}});
+    if (!artist && dto.artistId !== null) {
       return undefined;
     }
     const updAlbum = { ...album, ...dto } as Album;
-    this.db.albums.splice(albumIndex, 1, updAlbum);
-    return updAlbum;
+    return await this.db.albums.save(updAlbum);
   }
 
-  deleteAlbum(id: string) {
-    const album = this.db.albums.find((el) => el.id === id);
-    if (album === undefined) {
+  async deleteAlbum(id: string) {
+    const album = await  this.db.albums.findOne({where: {id}});
+    if (!album) {
       return undefined;
     }
-
-    const favAlbumIndex = this.db.favorites.albums.findIndex(
-      (el) => el.id === album.id,
-    );
-    if (favAlbumIndex !== -1) {
-      this.db.favorites.albums.splice(favAlbumIndex, 1);
-    }
-    const trackInd = this.db.tracks.findIndex((el) => el.albumId === id);
-    const track = this.db.tracks.find((el) => el.albumId === id);
-    if (trackInd !== -1) {
-      const obj = { ...track } as Track;
-      obj.albumId = null;
-      this.db.tracks.splice(trackInd, 1, obj);
-    }
-    const albumIndex = this.db.albums.findIndex((el) => el.id === id);
-    this.db.albums.splice(albumIndex, 1);
-    return album;
+    
+    await this.db.albums.delete(id);
+    return true
   }
 }
