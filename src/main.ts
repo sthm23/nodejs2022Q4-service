@@ -4,9 +4,19 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { readFile } from 'node:fs/promises';
 import * as yaml from 'js-yaml';
+import { MyLogger } from './models/logger/myloger.service';
+import { HttpExceptionFilter } from './models/logger/http-exeption.filter';
+import { logger } from './models/logger/logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+
+  const logger = app.get(MyLogger)
+  app.useLogger(logger);
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('PORT') || 4000;
 
@@ -18,3 +28,11 @@ async function bootstrap() {
   await app.listen(PORT);
 }
 bootstrap();
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger(`${promise}, ${reason}`, '','ERROR');
+});
+
+process.on('uncaughtException', (err, origin) => {
+  logger( `${err}` + `${origin}`, '', 'ERROR');
+});
