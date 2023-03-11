@@ -11,10 +11,13 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ArtistDto, ArtistSchema } from './dto/artist.dto';
 import { ArtistValidatePipe } from './pipes/artistCreate.pipe';
+import { AccessTokenGuard } from '../auth/guard/accessToken.guard';
 
+@UseGuards(AccessTokenGuard)
 @Controller('artist')
 export class ArtistsController {
   constructor(private artistsService: ArtistService) {}

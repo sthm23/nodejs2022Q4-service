@@ -13,10 +13,13 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto, createUserSchema } from './dto/create-user.dto';
 import { UserValidatePipe } from './pipes/userValidate.pipe';
+import { AccessTokenGuard } from '../auth/guard/accessToken.guard';
 
+@UseGuards(AccessTokenGuard)
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}

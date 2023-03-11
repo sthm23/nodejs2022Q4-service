@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn,  } from 'typeorm';
 
 @Entity()
-export class UsersEntity {
+export class AuthEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -10,16 +10,4 @@ export class UsersEntity {
 
   @Column()
   password: string;
-
-  @Column({ default: 1 })
-  version: number;
-
-  @Column()
-  createdAt: string;
-
-  @Column()
-  updatedAt: string;
-
-  @Column({nullable: true})
-  refToken: string;
 }

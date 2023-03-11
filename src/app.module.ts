@@ -12,6 +12,7 @@ import { TracksEntity } from './models/track/entities/tracks.entity';
 import { AlbumsEntity } from './models/albums/entities/album.entity';
 import { ArtistsEntity } from './models/artist/entities/artists.entity';
 import { FavoriteEntity } from './models/favorites/entities/fav.entity';
+import { AuthModule } from './models/auth/auth.module';
 
 @Module({
   imports: [
@@ -24,13 +25,13 @@ import { FavoriteEntity } from './models/favorites/entities/fav.entity';
       password: process.env.POSTGRES_PW,
       database: process.env.POSTGRES_DB,
       entities: [UsersEntity, TracksEntity, AlbumsEntity, ArtistsEntity, FavoriteEntity],
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       // logging: true,
       // migrations: []
     }),
     DbModule,
-
+    AuthModule,
     UsersModule,
     ArtistModule,
     TrackModule,
